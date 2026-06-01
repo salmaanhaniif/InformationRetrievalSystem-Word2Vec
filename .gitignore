@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+.venv/
+
+# uv
+.python-version
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+.env
