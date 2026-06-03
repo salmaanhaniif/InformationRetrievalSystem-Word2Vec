@@ -1,0 +1,105 @@
+%% Information Retrieval System - Word2Vec Query Expansion
+%% Architecture Diagram
+
+flowchart TB
+    subgraph Client["🌐 Client Layer"]
+        UI["Web Frontend\n(React/Vite)"]
+    end
+
+    subgraph API["🔌 API Layer (FastAPI)"]
+        API_MAIN["api/main.py\n/api/search\n/api/expand\n/api/index\n/api/map"]
+    end
+
+    subgraph Core["⚙️ Core Processing Layer"]
+        direction TB
+
+        subgraph Preprocess["Text Processing"]
+            PARSER["parser.py\n• Parse CISI format\n• .I .T .A .W .B tags"]
+            PREPROC["preprocessor.py\n• Lowercase\n• Tokenize\n• Stopword removal\n• Porter stemming"]
+        end
+
+        subgraph Index["Indexing"]
+            INDEXER["indexer.py\n• Build inverted index\n• TF counting\n• Save/Load JSON/Pickle"]
+        end
+
+        subgraph W2V["Word2Vec Engine"]
+            W2V_ENGINE["word2vec_engine.py\n• Load pre-trained model\n• get_similar()\n• similarity()\n• Singleton pattern"]
+        end
+
+        subgraph Expansion["Query Expansion"]
+            QEXPAND["query_expansion.py\n• expand_query()\n• expand_query_all()\n• get_expanded_query_terms()"]
+        end
+
+        subgraph Retrieval["Retrieval Engine (evaluator.py)"]
+            TFIDF["TF-IDF Vectorizer\n• compute_tf_idf_vector()\n• compute_idf()"]
+            SIM["Cosine Similarity\n• cosine_similarity()\n• retrieve_documents()"]
+        end
+
+        subgraph Eval["Evaluation"]
+            EVAL["evaluator.py\n• compute_ap()\n• compute_map()\n• parse_qrels()\n• run_experiment()"]
+        end
+    end
+
+    subgraph Data["💾 Data Layer"]
+        CISI["data/cisi.all\n(1460 documents)"]
+        QUERY["data/query.text\n(112 queries)"]
+        QRELS["data/qrels.txt\n(76 queries with qrels)"]
+        IDX["inverted_index.json/.pkl"]
+        W2V_MODEL["word2vec-google-news-300\n(~1.6GB, 3M vocab)"]
+    end
+
+    subgraph Output["📊 Output"]
+        RESULTS["Ranked Documents\n(doc_id, similarity)"]
+        EXP_TERMS["Expansion Terms\n(term, score)"]
+        MAP_REPORT["map_report.txt\nMAP original vs expanded"]
+    end
+
+    %% Client to API
+    UI -->|HTTP POST /api/search| API_MAIN
+    UI -->|HTTP POST /api/expand| API_MAIN
+
+    %% API to Core
+    API_MAIN -->|parse documents| PARSER
+    API_MAIN -->|preprocess text| PREPROC
+    API_MAIN -->|build/load index| INDEXER
+    API_MAIN -->|get similar terms| W2V_ENGINE
+    API_MAIN -->|expand query| QEXPAND
+    API_MAIN -->|retrieve & rank| TFIDF
+    API_MAIN -->|evaluate| EVAL
+
+    %% Core internal flows
+    PARSER -->|dict[doc_id, content]| PREPROC
+    PREPROC -->|list[tokens]| INDEXER
+    PREPROC -->|query tokens| QEXPAND
+    INDEXER -->|inverted index| TFIDF
+    INDEXER -->|tokenized docs| TFIDF
+    QEXPAND -->|expanded terms| TFIDF
+    W2V_ENGINE -->|similar words| QEXPAND
+    TFIDF -->|query & doc vectors| SIM
+    SIM -->|ranked doc_ids| RESULTS
+    SIM -->|rankings| EVAL
+
+    %% Data connections
+    CISI -->|read| PARSER
+    QUERY -->|read| PARSER
+    QRELS -->|read| EVAL
+    IDX -.->|load/save| INDEXER
+    W2V_MODEL -.->|load| W2V_ENGINE
+
+    %% Output connections
+    RESULTS --> UI
+    EXP_TERMS --> UI
+    EVAL --> MAP_REPORT
+
+    %% Styling
+    classDef client fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef api fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef core fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef data fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    classDef output fill:#fce4ec,stroke:#880e4f,stroke-width:2px
+
+    class UI client
+    class API_MAIN api
+    class PARSER,PREPROC,INDEXER,W2V_ENGINE,QEXPAND,TFIDF,SIM,EVAL core
+    class CISI,QUERY,QRELS,IDX,W2V_MODEL data
+    class RESULTS,EXP_TERMS,MAP_REPORT output
