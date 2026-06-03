@@ -1,59 +1,67 @@
 import math
 
-_n_docs_cache = {}
+_index_cache_id = None
+_n_docs = 0
 _max_tf_cache = {}
 _norm_cache = {}
 
-def get_n_docs(index: dict) -> int:
-    index_id = id(index)
-    if index_id in _n_docs_cache:
-        return _n_docs_cache[index_id]
+def _populate_cache_if_needed(index: dict):
+    global _index_cache_id, _n_docs, _max_tf_cache, _norm_cache
+    
+    current_id = id(index)
+    if _index_cache_id == current_id:
+        return
         
+    _index_cache_id = current_id
+    _n_docs = 0
+    _max_tf_cache = {}
+    _norm_cache = {}
+    
+    # Track document IDs
     doc_ids = set()
     for entry in index.values():
         doc_ids.update(entry.get("postings", {}).keys())
+    _n_docs = len(doc_ids)
+    
+    # Pass 1: compute max_tf
+    for term, entry in index.items():
+        postings = entry.get("postings", {})
+        for doc_id, tf in postings.items():
+            if doc_id not in _max_tf_cache:
+                _max_tf_cache[doc_id] = 0
+            if tf > _max_tf_cache[doc_id]:
+                _max_tf_cache[doc_id] = tf
+                
+    # Pass 2: compute norms (tfidf_cos)
+    norm_sq = {doc_id: 0.0 for doc_id in doc_ids}
+    for term, entry in index.items():
+        df = entry.get("df", 0)
+        if df == 0:
+            continue
+            
+        idf = math.log(_n_docs / df)
+        postings = entry.get("postings", {})
         
-    _n_docs_cache[index_id] = len(doc_ids)
-    return _n_docs_cache[index_id]
+        for doc_id, tf in postings.items():
+            if tf > 0:
+                tf_log = 1.0 + math.log(tf)
+                w = tf_log * idf
+                norm_sq[doc_id] += w * w
+                
+    for doc_id, sq in norm_sq.items():
+        _norm_cache[doc_id] = math.sqrt(sq)
+
+def get_n_docs(index: dict) -> int:
+    _populate_cache_if_needed(index)
+    return _n_docs
 
 def get_max_tf(doc_id: str, index: dict) -> int:
-    index_id = id(index)
-    if index_id not in _max_tf_cache:
-        _max_tf_cache[index_id] = {}
-        
-    if doc_id in _max_tf_cache[index_id]:
-        return _max_tf_cache[index_id][doc_id]
-        
-    max_tf = 0
-    for entry in index.values():
-        tf = entry.get("postings", {}).get(doc_id, 0)
-        if tf > max_tf:
-            max_tf = tf
-            
-    _max_tf_cache[index_id][doc_id] = max_tf
-    return max_tf
+    _populate_cache_if_needed(index)
+    return _max_tf_cache.get(doc_id, 0)
 
 def get_doc_norm(doc_id: str, index: dict, n_docs: int) -> float:
-    index_id = id(index)
-    if index_id not in _norm_cache:
-        _norm_cache[index_id] = {}
-        
-    if doc_id in _norm_cache[index_id]:
-        return _norm_cache[index_id][doc_id]
-        
-    norm_sq = 0.0
-    for entry in index.values():
-        tf = entry.get("postings", {}).get(doc_id, 0)
-        if tf > 0:
-            df = entry.get("df", 0)
-            idf = math.log(n_docs / df) if df > 0 else 0.0
-            tf_log = 1.0 + math.log(tf)
-            w = tf_log * idf
-            norm_sq += w * w
-            
-    norm = math.sqrt(norm_sq)
-    _norm_cache[index_id][doc_id] = norm
-    return norm
+    _populate_cache_if_needed(index)
+    return _norm_cache.get(doc_id, 0.0)
 
 def get_weight(term: str, doc_id: str, scheme: str, index: dict) -> float:
     term_entry = index.get(term, {})

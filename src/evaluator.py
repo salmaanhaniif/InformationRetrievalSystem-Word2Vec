@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-import math
-from collections import Counter
 from pathlib import Path
 
 from src.parser import parse_text
 from src.preprocessor import preprocess
 from src.query_expansion import get_expanded_query_terms
+from src.indexer import build_index
+from src.retrieval import rank_documents
 
 
 def parse_qrels(file_path: str) -> dict[str, set[str]]:
@@ -83,124 +83,6 @@ def parse_queries(file_path: str) -> dict[str, str]:
     raw = Path(file_path).read_text(encoding="utf-8", errors="ignore")
     docs = parse_text(raw)
     return docs
-
-
-def build_index_for_retrieval(
-    docs: dict[str, str],
-    stemming: bool = True,
-    remove_stopword: bool = True,
-) -> tuple[dict[str, dict[str, int]], dict[str, list[str]]]:
-    """
-    Build inverted index and store tokenized docs for retrieval.
-    Returns (inverted_index, tokenized_docs).
-    """
-    inverted_index: dict[str, dict[str, int]] = {}
-    tokenized_docs: dict[str, list[str]] = {}
-
-    for doc_id, content in docs.items():
-        tokens = preprocess(content, stemming, remove_stopword)
-        if not tokens:
-            continue
-
-        tokenized_docs[doc_id] = tokens
-        term_counts = Counter(tokens)
-
-        for term, count in term_counts.items():
-            if term not in inverted_index:
-                inverted_index[term] = {}
-            inverted_index[term][doc_id] = count
-
-    return inverted_index, tokenized_docs
-
-
-def compute_idf(
-    inverted_index: dict[str, dict[str, int]],
-    num_docs: int,
-) -> dict[str, float]:
-    """
-    Compute IDF for each term in the inverted index.
-    IDF(t) = log(N / df(t)) where df(t) is document frequency.
-    """
-    idf: dict[str, float] = {}
-    for term, postings in inverted_index.items():
-        df = len(postings)
-        idf[term] = math.log(num_docs / df) if df > 0 else 0.0
-    return idf
-
-
-def compute_tf_idf_vector(
-    tokens: list[str],
-    idf: dict[str, float],
-) -> dict[str, float]:
-    """
-    Compute TF-IDF vector for a document or query.
-    Uses log-normalized TF: tf(t,d) = 1 + log(count(t,d)) if count > 0, else 0.
-    """
-    if not tokens:
-        return {}
-
-    term_counts = Counter(tokens)
-    vector: dict[str, float] = {}
-
-    for term, count in term_counts.items():
-        tf = 1 + math.log(count) if count > 0 else 0.0
-        idf_val = idf.get(term, 0.0)
-        vector[term] = tf * idf_val
-
-    return vector
-
-
-def cosine_similarity(
-    vec1: dict[str, float],
-    vec2: dict[str, float],
-) -> float:
-    """
-    Compute cosine similarity between two sparse vectors.
-    """
-    if not vec1 or not vec2:
-        return 0.0
-
-    common_terms = set(vec1.keys()) & set(vec2.keys())
-    if not common_terms:
-        return 0.0
-
-    dot_product = sum(vec1[t] * vec2[t] for t in common_terms)
-    norm1 = math.sqrt(sum(v * v for v in vec1.values()))
-    norm2 = math.sqrt(sum(v * v for v in vec2.values()))
-
-    if norm1 == 0.0 or norm2 == 0.0:
-        return 0.0
-
-    return dot_product / (norm1 * norm2)
-
-
-def retrieve_documents(
-    query_tokens: list[str],
-    inverted_index: dict[str, dict[str, int]],
-    tokenized_docs: dict[str, list[str]],
-    idf: dict[str, float],
-    top_k: int = 100,
-) -> list[tuple[str, float]]:
-    """
-    Retrieve documents ranked by TF-IDF cosine similarity.
-    Returns list of (doc_id, score) sorted by score descending.
-    """
-    if not query_tokens:
-        return []
-
-    query_vector = compute_tf_idf_vector(query_tokens, idf)
-    if not query_vector:
-        return []
-
-    scores: list[tuple[str, float]] = []
-    for doc_id, doc_tokens in tokenized_docs.items():
-        doc_vector = compute_tf_idf_vector(doc_tokens, idf)
-        score = cosine_similarity(query_vector, doc_vector)
-        if score > 0.0:
-            scores.append((doc_id, score))
-
-    scores.sort(key=lambda x: x[1], reverse=True)
-    return scores[:top_k]
 
 
 def compute_ap(rankings: list[str], relevant_docs: set[str]) -> float:
@@ -291,51 +173,36 @@ def run_experiment(
     stemming: bool = True,
     remove_stopword: bool = True,
     use_expansion: bool = True,
+    scheme: str = "tfidf_cos",
+    docs: dict[str, str] = None,
+    inverted_index: dict[str, dict] = None,
 ) -> dict:
     """
     Run IR experiment comparing original vs expanded queries.
-
-    Returns dict with:
-        - map_original: overall MAP for original queries
-        - map_expanded: overall MAP for expanded queries
-        - per_query_ap_original: per-query AP for original
-        - per_query_ap_expanded: per-query AP for expanded
-        - rankings_original: per-query rankings for original
-        - rankings_expanded: per-query rankings for expanded
-        - qrels: parsed qrels
-        - num_queries: number of queries evaluated
-        - num_docs: number of documents in collection
+    ... (docstring truncated for brevity)
     """
-    # Parse data
-    docs = parse_text(Path(docs_path).read_text(encoding="utf-8", errors="ignore"))
+    if docs is None:
+        docs = parse_text(Path(docs_path).read_text(encoding="utf-8", errors="ignore"))
+        
     queries = parse_queries(queries_path)
     qrels = parse_qrels(qrels_path)
 
-    # Build index
-    inverted_index, tokenized_docs = build_index_for_retrieval(
-        docs, stemming, remove_stopword
-    )
-    idf = compute_idf(inverted_index, len(tokenized_docs))
+    if inverted_index is None:
+        inverted_index = build_index(docs, stemming=stemming, remove_stopword=remove_stopword)
 
-    # Run retrieval for each query
     rankings_original: dict[str, list[str]] = {}
     rankings_expanded: dict[str, list[str]] = {}
 
     for query_id, query_text in queries.items():
         q_id_normalized = normalize_doc_id(query_id)
 
-        # Only evaluate queries that have qrels
         if q_id_normalized not in qrels:
             continue
 
-        # Original query
         original_tokens = preprocess(query_text, stemming, remove_stopword)
-        original_results = retrieve_documents(
-            original_tokens, inverted_index, tokenized_docs, idf, top_k
-        )
-        rankings_original[q_id_normalized] = [doc_id for doc_id, _ in original_results]
+        original_results = rank_documents(original_tokens, inverted_index, scheme)
+        rankings_original[q_id_normalized] = [doc_id for doc_id, _ in original_results[:top_k]]
 
-        # Expanded query
         if use_expansion:
             try:
                 expanded_terms = get_expanded_query_terms(
@@ -346,12 +213,9 @@ def run_experiment(
         else:
             expanded_terms = original_tokens
 
-        expanded_results = retrieve_documents(
-            expanded_terms, inverted_index, tokenized_docs, idf, top_k
-        )
-        rankings_expanded[q_id_normalized] = [doc_id for doc_id, _ in expanded_results]
+        expanded_results = rank_documents(expanded_terms, inverted_index, scheme)
+        rankings_expanded[q_id_normalized] = [doc_id for doc_id, _ in expanded_results[:top_k]]
 
-    # Compute MAP
     per_query_ap_original, map_original = compute_map(rankings_original, qrels)
     per_query_ap_expanded, map_expanded = compute_map(rankings_expanded, qrels)
 
@@ -364,7 +228,7 @@ def run_experiment(
         "rankings_expanded": rankings_expanded,
         "qrels": qrels,
         "num_queries": len(qrels),
-        "num_docs": len(tokenized_docs),
+        "num_docs": len(docs),
     }
 
 

@@ -1,3 +1,5 @@
+import math
+from functools import lru_cache
 from gensim.models import KeyedVectors, Word2Vec
 from pathlib import Path
 import gensim.downloader as api
@@ -19,6 +21,9 @@ class Word2VecEngine:
 
     def load_pretrained_from_gensim(self, model_name = "word2vec-google-news-300") -> None:
         self.model      = api.load(model_name)
+        # Fill L2 norms instantly to avoid lazy-loading on first query
+        if hasattr(self.model, 'fill_norms'):
+            self.model.fill_norms()
         self._loaded    = True
         self.model_path = model_name
 
@@ -57,27 +62,21 @@ class Word2VecEngine:
         w2v.save(save_path)
 
         self.model = w2v.wv
+        if hasattr(self.model, 'fill_norms'):
+            self.model.fill_norms()
         self.model_path = save_path
         self._loaded = True
 
-    def get_similar(self, term: str, top_n: int = 10) -> list[tuple[str, float]]:
-        """
-        Args:
-            term  : kata yang dicari kemiripannya (sudah di-preprocess)
-            top_n : jumlah kata yang dikembalikan
-
-        Returns:
-            list of (word, cosine_similarity_score), sudah diurutkan descending
-            Contoh: [("indexing", 0.81), ("document", 0.78), ("search", 0.75)]
-        """
+    @lru_cache(maxsize=10000)
+    def _cached_get_similar(self, term: str) -> list[tuple[str, float]]:
         self._check_loaded()
-        term = term.lower().strip()
 
         if not self.is_in_vocab(term):
             return []
 
         try:
-            raw = self.model.most_similar(term, topn=top_n * 5)
+            # Selalu minta jumlah yang besar agar bisa di-slice oleh caller tanpa cache miss
+            raw = self.model.most_similar(term, topn=150)
 
             results = []
             for word, score in raw:
@@ -100,13 +99,26 @@ class Word2VecEngine:
                     continue
 
                 results.append((word, score))
-                if len(results) >= top_n:
-                    break
 
             return results
 
         except Exception as e:
             return []
+
+    def get_similar(self, term: str, top_n: int = 10) -> list[tuple[str, float]]:
+        """
+        Args:
+            term  : kata yang dicari kemiripannya (sudah di-preprocess)
+            top_n : jumlah kata yang dikembalikan
+
+        Returns:
+            list of (word, cosine_similarity_score), sudah diurutkan descending
+            Contoh: [("indexing", 0.81), ("document", 0.78), ("search", 0.75)]
+        """
+        term = term.lower().strip()
+        results = self._cached_get_similar(term)
+        return results[:top_n]
+
     
     def similarity(self, term1: str, term2: str) -> float:
         """
