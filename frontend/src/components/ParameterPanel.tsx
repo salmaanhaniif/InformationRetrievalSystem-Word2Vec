@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { rebuildIndex } from '../api/search'
 import type { SearchParams, WeightingScheme } from '../types/search'
 
 interface Props {
@@ -47,6 +49,22 @@ function SectionLabel({ children }: { children: string }) {
 }
 
 export default function ParameterPanel({ params, onChange }: Props) {
+  const [loading, setLoading] = useState(false)
+
+  const handleRebuild = async () => {
+    if (!confirm('Apakah Anda yakin ingin menghapus semua index dan cache MAP? Proses ini akan memakan waktu saat pencarian berikutnya.')) return
+    
+    setLoading(true)
+    try {
+      const res = await rebuildIndex()
+      alert(res.message)
+    } catch (err) {
+      alert('Gagal menghapus index: ' + err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <aside className="w-56 shrink-0 flex flex-col border-r border-gray-200 dark:border-[#0891b2]/10 bg-white dark:bg-[#0a0d16] h-full overflow-y-auto">
       {/* Brand strip */}
@@ -125,6 +143,20 @@ export default function ParameterPanel({ params, onChange }: Props) {
             </div>
             <span className="text-sm text-gray-600 dark:text-[#8b949e]">Expand all</span>
           </label>
+        </div>
+
+        <div className="h-px bg-gray-100 dark:bg-[#21262d]/60" />
+
+        {/* Actions */}
+        <div className="space-y-2">
+          <SectionLabel>Management</SectionLabel>
+          <button
+            onClick={handleRebuild}
+            disabled={loading}
+            className="w-full text-xs font-medium py-2 px-3 rounded-lg border border-red-200 dark:border-red-900/30 bg-red-50 dark:bg-red-900/10 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/20 transition-all disabled:opacity-50"
+          >
+            {loading ? 'Rebuilding...' : 'Rebuild Index'}
+          </button>
         </div>
       </div>
     </aside>

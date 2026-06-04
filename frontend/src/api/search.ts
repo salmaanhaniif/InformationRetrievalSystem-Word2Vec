@@ -33,3 +33,15 @@ export function getInvertedIndex(docId: string): Promise<Record<string, unknown>
 export function getMapReport(): Promise<QueryMapResult[]> {
   return get<QueryMapResult[]>('/api/map')
 }
+
+export function rebuildIndex(): Promise<{ message: string }> {
+  return post<{ message: string }>('/api/index/rebuild', {})
+}
+
+export function recalculateMapSingle(params: SearchParams): Promise<{ message: string }> {
+  return post<{ message: string }>('/api/map/recalculate/single', params)
+}
+
+export function recalculateMapAll(): Promise<{ message: string }> {
+  return post<{ message: string }>('/api/map/recalculate/all', {})
+}
