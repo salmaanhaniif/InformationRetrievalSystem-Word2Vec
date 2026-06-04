@@ -101,7 +101,7 @@ export default function SearchPage() {
               </div>
               {activeTab === 'results' && <ResultsTab data={data} />}
               {activeTab === 'expansion' && <ExpansionTab data={data} />}
-              {activeTab === 'map' && <MapReportTab data={data} />}
+              {activeTab === 'map' && <MapReportTab data={data} params={params} />}
             </>
           )}
         </div>

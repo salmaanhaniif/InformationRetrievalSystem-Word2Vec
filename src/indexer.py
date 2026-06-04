@@ -11,14 +11,14 @@ DEFAULT_STEMMING = True
 DEFAULT_REMOVE_STOPWORD = True
 
 
-def build_index(docs: dict[str, str]) -> dict[str, dict]:
+def build_index(docs: dict[str, str], stemming: bool = DEFAULT_STEMMING, remove_stopword: bool = DEFAULT_REMOVE_STOPWORD) -> dict[str, dict]:
     """
     Build an inverted index from a dict of doc_id -> content.
     """
     index: dict[str, dict] = {}
 
     for doc_id, content in docs.items():
-        tokens = preprocess(content, DEFAULT_STEMMING, DEFAULT_REMOVE_STOPWORD)
+        tokens = preprocess(content, stemming, remove_stopword)
         if not tokens:
             continue
 

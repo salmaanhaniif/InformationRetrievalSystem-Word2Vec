@@ -237,6 +237,24 @@ Run full IR experiment.
 #### `write_report(results, output_path)`
 Write evaluation report to file.
 
+### `src/weighting.py`
+
+#### `get_weight(term, doc_id, scheme, index) -> float`
+Menghitung bobot term pada dokumen menggunakan skema yang ditentukan. Menggunakan caching memory terhadap metadata index untuk memastikan akses data $O(1)$.
+Skema yang didukung:
+- `tf_raw`: Raw term frequency.
+- `tf_log`: $1 + \log(\text{tf})$
+- `tf_bin`: $1$ jika ada, $0$ jika tidak
+- `tf_aug`: $0.5 + 0.5 \times (\text{tf} / \text{max\_tf})$
+- `idf`: $\log(N / \text{df})$
+- `tfidf`: `tf_log` $\times$ `idf`
+- `tfidf_cos`: Cosine normalized TF-IDF score.
+
+### `src/retrieval.py`
+
+#### `rank_documents(query_terms, index, scheme) -> list[tuple[str, float]]`
+Meranking dokumen yang relevan berdasarkan skor kemiripan antara query vector dan document vector sesuai skema pembobotan. Skema `tfidf_cos` menggunakan Cosine Similarity. Mengembalikan list `(doc_id, score)` terurut menurun.
+
 ### `src/query_expansion.py`
 
 #### `expand_query(query_terms, top_n=5) -> list[(term, score)]`

@@ -1,15 +1,69 @@
-import type { SearchResponse } from '../../types/search'
+import { useState } from 'react'
+import { recalculateMapAll, recalculateMapSingle } from '../../api/search'
+import type { SearchResponse, SearchParams } from '../../types/search'
 
 interface Props {
   data: SearchResponse
+  params: SearchParams
 }
 
-export default function MapReportTab({ data }: Props) {
+export default function MapReportTab({ data, params }: Props) {
+  const [loading, setLoading] = useState(false)
   const globalDelta = data.map_expanded - data.map_original
   const pctGain = ((globalDelta / data.map_original) * 100).toFixed(1)
 
+  const handleRecalculateSingle = async () => {
+    if (!confirm('Recalculate MAP ONLY for current parameter and weighting?')) return
+    setLoading(true)
+    try {
+      const res = await recalculateMapSingle(params)
+      alert(res.message)
+    } catch (err) {
+      alert('Gagal kalkulasi ulang: ' + err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleRecalculateAll = async () => {
+    if (!confirm('Recalculate MAP benchmark for all 28 variations? Ini akan memakan waktu beberapa menit.')) return
+    setLoading(true)
+    try {
+      const res = await recalculateMapAll()
+      alert(res.message)
+    } catch (err) {
+      alert('Gagal kalkulasi ulang: ' + err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="mt-4 space-y-5">
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-gray-400 dark:text-[#8b949e]/70">
+            Precision Metrics
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={handleRecalculateSingle}
+            disabled={loading}
+            className="flex-1 text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg border border-gray-200 dark:border-[#21262d] bg-white dark:bg-[#0d1117] text-gray-500 dark:text-[#8b949e] hover:bg-gray-50 dark:hover:bg-[#161b22] transition-all disabled:opacity-50"
+          >
+            {loading ? 'Recalculating...' : 'Recalculate MAP for this parameter and weighting'}
+          </button>
+          <button
+            onClick={handleRecalculateAll}
+            disabled={loading}
+            className="flex-1 text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg border border-[#0891b2]/20 dark:border-[#0891b2]/10 bg-[#0891b2]/5 dark:bg-[#0891b2]/8 text-[#0891b2] dark:text-[#22d3ee] hover:bg-[#0891b2]/10 dark:hover:bg-[#0891b2]/15 transition-all disabled:opacity-50"
+          >
+            {loading ? 'Recalculating all...' : 'Recalculate MAP for all 28 variations'}
+          </button>
+        </div>
+      </div>
+
       {/* Metric cards */}
       <div className="grid grid-cols-2 gap-4">
         <div className="rounded-xl border border-gray-200 dark:border-[#21262d] bg-white dark:bg-[#0d1117] p-5">
