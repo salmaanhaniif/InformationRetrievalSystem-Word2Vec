@@ -12,6 +12,7 @@
 \usepackage{float}
 \usepackage{titlesec}
 \usepackage{caption}
+\usepackage{multirow}
 
 \geometry{
     top=2.5cm,
@@ -287,8 +288,8 @@ InformationRetrievalSystem-Word2Vec/
 \subsection{preprocessor.py}
 Modul ini menangani preprocessing teks dengan fungsi-fungsi:
 \begin{itemize}
-    \item \texttt{preprocess(text, stemming, remove\_stopword)} - Fungsi utama preprocessing
-    \item \texttt{\_normalize\_text(text)} - Lowercase dan hapus karakter non-alfanumerik menggunakan regex
+    \item \texttt{preprocess(text, stemming, remove\_stopword)}\\ - Fungsi utama preprocessing
+    \item \texttt{\_normalize\_text(text)}\\ - Lowercase dan hapus karakter non-alfanumerik menggunakan regex
     \item \texttt{\_tokenize(text)} - Split teks menjadi token berdasarkan spasi
     \item \texttt{\_remove\_stopwords(tokens)} - Hapus stopwords English dari NLTK corpus
     \item \texttt{\_stem\_tokens(tokens)} - Porter Stemmer dari NLTK
@@ -299,7 +300,7 @@ Parser untuk format dokumen CISI:
 \begin{itemize}
     \item \texttt{parse\_docs(file\_path)} - Parse dokumen dari file
     \item \texttt{parse\_text(raw)} - Parse dokumen dari string
-    \item Tags yang didukung: \texttt{.I} (ID), \texttt{.T} (Title), \texttt{.A} (Author), \texttt{.W} (Abstract), \texttt{.B} (Bibliography)
+    \item Tags yang didukung: \texttt{.I} (ID), \texttt{.T} (Title), \texttt{.A} (Author), \\ \texttt{.W} (Abstract), \texttt{.B} (Bibliography)
     \item Normalisasi doc\_id ke format \texttt{DOC\#\#\#}
     \item Output: \texttt{dict[doc\_id, content]}
 \end{itemize}
@@ -317,7 +318,7 @@ Pembangunan inverted index:
 \subsection{weighting.py}
 Modul pembobotan term dengan 7 skema:
 \begin{itemize}
-    \item \texttt{get\_weight(term, doc\_id, scheme, index)} - Hitung bobot term untuk dokumen
+    \item \texttt{get\_weight(term, doc\_id, scheme, index)}\\ - Hitung bobot term untuk dokumen
     \item \texttt{get\_n\_docs(index)} - Hitung jumlah dokumen dalam koleksi
     \item Skema yang didukung:
     \begin{enumerate}
@@ -334,8 +335,8 @@ Modul pembobotan term dengan 7 skema:
 \subsection{retrieval.py}
 Engine untuk ranking dokumen:
 \begin{itemize}
-    \item \texttt{rank\_documents(query\_terms, index, scheme)} - Ranking dokumen berdasarkan similarity
-    \item \texttt{compute\_query\_weight(term, tf, max\_tf, n\_docs, df, scheme)} - Hitung bobot query term
+    \item \texttt{rank\_documents(query\_terms, index, scheme)}\\ - Ranking dokumen berdasarkan similarity
+    \item \texttt{compute\_query\_weight(term, tf, max\_tf, n\_docs, df, scheme)}\\ - Hitung bobot query term
     \item Menggunakan \texttt{weighting.py} untuk perhitungan bobot
     \item Untuk \texttt{tfidf\_cos}: melakukan cosine normalization pada query vector
     \item Output: \texttt{list[(doc\_id, score)]} diurutkan descending
@@ -364,19 +365,19 @@ Logika query expansion:
 \begin{itemize}
     \item \texttt{expand\_query(query\_terms, top\_n)} - Expand dengan batas term
     \item \texttt{expand\_query\_all(query\_terms)} - Expand tanpa batas (top-50 similar per term)
-    \item \texttt{get\_expanded\_query\_terms(query\_terms, top\_n, expand\_all)} - Combine original + expanded
-    \item \texttt{format\_expansion\_detail(query\_terms, expanded, query\_id)} - Format output untuk logging
+    \item \texttt{get\_expanded\_query\_terms(query\_terms, top\_n, expand\_all)}\\ - Combine original + expanded
+    \item \texttt{format\_expansion\_detail(query\_terms, expanded, query\_id)}\\ - Format output untuk logging
 \end{itemize}
 
 \subsection{evaluator.py}
 Evaluasi performa sistem:
 \begin{itemize}
-    \item \texttt{parse\_qrels(file\_path)} - Parse relevance judgments (auto-detect format: binary vs graded)
+    \item \texttt{parse\_qrels(file\_path)}\\ - Parse relevance judgments (auto-detect format: binary vs graded)
     \item \texttt{parse\_queries(file\_path)} - Parse queries dari format CISI
     \item \texttt{compute\_ap(rankings, relevant\_docs)} - Average Precision per query
     \item \texttt{compute\_map(rankings, qrels)} - Mean Average Precision overall
     \item \texttt{run\_experiment()} - Run full experiment dengan support untuk caching (docs dan inverted\_index dari caller)
-    \item \texttt{format\_report(results)} / \texttt{write\_report(results)} - Generate laporan evaluasi
+    \item \texttt{format\_report(results)} / \texttt{write\_report(results)}\\ - Generate laporan evaluasi
 \end{itemize}
 
 \subsection{api/main.py (Backend)}
@@ -393,15 +394,15 @@ FastAPI REST API dengan fitur caching:
         \item \texttt{GET /api/index/\{doc\_id\}} - Get inverted index untuk dokumen
         \item \texttt{GET /api/map} - Get MAP evaluation report
         \item \texttt{POST /api/index/rebuild} - Hapus semua index dan cache
-        \item \texttt{POST /api/map/recalculate/single} - Recalculate MAP untuk 1 konfigurasi
+        \item \texttt{POST /api/map/recalculate/single}\\ - Recalculate MAP untuk 1 konfigurasi
         \item \texttt{POST /api/map/recalculate/all} - Recalculate MAP untuk seluruh 28 variasi
     \end{itemize}
 \end{itemize}
 
 \section{Alur Program}
 \begin{enumerate}
-    \item \textbf{Startup}: Load Word2Vec model, parse dokumen CISI, load MAP cache, jalankan benchmark loop untuk 28 variasi
-    \item \textbf{Search Request}: Terima request, get/build cached index, preprocess query, expand query, rank dokumen, get MAP dari cache, return response
+    \item \textbf{Startup}: Muat model Word2Vec, parse dokumen CISI, muat cache MAP, jalankan benchmark loop 28 variasi
+    \item \textbf{Search Request}: Terima request, dapatkan/buat index cache, preprocess query, expand query, rank dokumen, get MAP dari cache, return response
     \item \textbf{Evaluation}: Untuk setiap query di qrels, preprocess, retrieve, compute AP, compute MAP
 \end{enumerate}
 
@@ -470,13 +471,13 @@ Frontend dibangun menggunakan stack modern:
 Struktur komponen frontend:
 \begin{itemize}
     \item \texttt{App.tsx} - Root component, merender \texttt{SearchPage}
-    \item \texttt{SearchPage.tsx} - Halaman utama dengan state management (params, activeTab, darkMode)
-    \item \texttt{ParameterPanel.tsx} - Sidebar kiri dengan toggle stemming/stopword, dropdown weighting, input top-N, checkbox expand all, dan tombol rebuild index
+    \item \texttt{SearchPage.tsx}\\ Halaman utama dengan state management (params, activeTab, darkMode)
+    \item \texttt{ParameterPanel.tsx}\\ Sidebar kiri dengan toggle stemming/stopword, dropdown weighting, input top-N, checkbox expand all, dan tombol rebuild index
     \item \texttt{SearchBar.tsx} - Input field untuk query dengan tombol search
     \item \texttt{TabBar.tsx} - Tab navigation (Results, Expansion, MAP Report)
     \item \texttt{ResultsTab.tsx} - Side-by-side comparison hasil original vs expanded dengan rank badge dan similarity score. Dokumen yang rank-nya membaik setelah expansion diberi highlight cyan
     \item \texttt{ExpansionTab.tsx} - Tampilan query terms (original + expanded) dan tabel expansion terms dengan similarity bar
-    \item \texttt{MapReportTab.tsx} - Metric cards (MAP original/expanded dengan delta), tombol recalculate, dan tabel per-query breakdown
+    \item \texttt{MapReportTab.tsx}\\ Metric cards (MAP original/expanded dengan delta), tombol recalculate, dan tabel per-query breakdown
     \item \texttt{EmptyState.tsx} - Tampilan awal dengan animasi glow
     \item \texttt{useSearch.ts} - Custom hook untuk search dengan mock data fallback
     \item \texttt{api/search.ts} - API client functions
@@ -529,6 +530,8 @@ Tabel berikut merangkum hasil evaluasi MAP untuk seluruh konfigurasi preprocessi
 
 \begin{table}[H]
     \centering
+    \small
+    \setlength{\tabcolsep}{5pt}
 \begin{tabular}{@{}cccccc@{}}
     \toprule
     \textbf{Stemming} & \textbf{Stopword} & \textbf{MAP Original} & \textbf{MAP Expanded} & \textbf{Selisih} & \textbf{Perubahan} \\
@@ -668,7 +671,8 @@ Ya, trade-off ini sangat terlihat pada hasil eksperimen. Pada 3 dari 4 konfigura
 \section{Anggota Kelompok}
 \begin{table}[H]
     \centering
-    \begin{tabular}{@{}lllc@{}}
+    \small
+    \begin{tabular}{@{}lll p{5.8cm}@{}}
         \toprule
         \textbf{NIM} & \textbf{Nama} & \textbf{Role} & \textbf{File Utama} \\
         \midrule
