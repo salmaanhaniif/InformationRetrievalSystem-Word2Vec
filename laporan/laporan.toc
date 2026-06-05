@@ -1,51 +1,61 @@
-\contentsline {chapter}{\numberline {1}Pendahuluan}{4}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Latar Belakang}{4}{section.1.1}%
-\contentsline {section}{\numberline {1.2}Tujuan}{4}{section.1.2}%
-\contentsline {section}{\numberline {1.3}Ruang Lingkup}{4}{section.1.3}%
-\contentsline {chapter}{\numberline {2}Deskripsi Aplikasi}{5}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Gambaran Umum}{5}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Fitur Utama}{5}{section.2.2}%
-\contentsline {section}{\numberline {2.3}Arsitektur Sistem}{6}{section.2.3}%
-\contentsline {chapter}{\numberline {3}Deskripsi Program}{8}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Struktur Proyek}{8}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Modul Program}{8}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}preprocessor.py}{8}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}parser.py}{9}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}indexer.py}{9}{subsection.3.2.3}%
-\contentsline {subsection}{\numberline {3.2.4}word2vec\_engine.py}{9}{subsection.3.2.4}%
-\contentsline {subsection}{\numberline {3.2.5}query\_expansion.py}{9}{subsection.3.2.5}%
-\contentsline {subsection}{\numberline {3.2.6}evaluator.py}{10}{subsection.3.2.6}%
-\contentsline {section}{\numberline {3.3}Alur Program}{10}{section.3.3}%
-\contentsline {chapter}{\numberline {4}Library dan Dependencies}{11}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Python Packages}{11}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Word2Vec Model}{11}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Frontend}{11}{section.4.3}%
-\contentsline {chapter}{\numberline {5}Hasil Eksperimen}{12}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Setup Eksperimen}{12}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Metrik Evaluasi}{12}{section.5.2}%
-\contentsline {subsection}{\numberline {5.2.1}Average Precision (AP)}{12}{subsection.5.2.1}%
-\contentsline {subsection}{\numberline {5.2.2}Mean Average Precision (MAP)}{12}{subsection.5.2.2}%
-\contentsline {section}{\numberline {5.3}Hasil Overall}{13}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Hasil Per-Query}{13}{section.5.4}%
-\contentsline {section}{\numberline {5.5}Analisis Perbandingan MAP Original vs Expanded}{13}{section.5.5}%
-\contentsline {section}{\numberline {5.6}Screenshot Aplikasi}{14}{section.5.6}%
-\contentsline {chapter}{\numberline {6}Pembagian Tugas}{16}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Anggota Kelompok}{16}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Detail Tugas}{16}{section.6.2}%
-\contentsline {subsection}{\numberline {6.2.1}Programmer 1 - Orvin Andika Ikhsan Abhista (13523017)}{16}{subsection.6.2.1}%
-\contentsline {subsection}{\numberline {6.2.2}Programmer 2 - Fajar Kurniawan (13523027)}{16}{subsection.6.2.2}%
-\contentsline {subsection}{\numberline {6.2.3}Programmer 3 - Salman Hanif (13523056)}{17}{subsection.6.2.3}%
-\contentsline {subsection}{\numberline {6.2.4}Programmer 4 - Aryo Wisanggeni (13523100)}{17}{subsection.6.2.4}%
-\contentsline {subsection}{\numberline {6.2.5}Programmer 5 - Sabilul Huda (13523072)}{17}{subsection.6.2.5}%
-\contentsline {chapter}{\numberline {7}Kesimpulan}{18}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Kesimpulan}{18}{section.7.1}%
-\contentsline {section}{\numberline {7.2}Saran Pengembangan}{18}{section.7.2}%
-\contentsline {chapter}{\numberline {8}Lampiran}{19}{chapter.8}%
-\contentsline {section}{\numberline {8.1}Cara Menjalankan Program}{19}{section.8.1}%
-\contentsline {subsection}{\numberline {8.1.1}Instalasi}{19}{subsection.8.1.1}%
-\contentsline {subsection}{\numberline {8.1.2}Menjalankan API Server}{19}{subsection.8.1.2}%
-\contentsline {subsection}{\numberline {8.1.3}Menjalankan Evaluasi}{19}{subsection.8.1.3}%
-\contentsline {subsection}{\numberline {8.1.4}Menjalankan dengan Query Expansion}{19}{subsection.8.1.4}%
-\contentsline {section}{\numberline {8.2}API Endpoints}{19}{section.8.2}%
-\contentsline {section}{\numberline {8.3}Referensi}{20}{section.8.3}%
-\contentsline {section}{\numberline {8.4}Foto Anggota}{20}{section.8.4}%
+\babel@toc {english}{}\relax 
+\contentsline {chapter}{\numberline {1}Pendahuluan}{5}{chapter.2}%
+\contentsline {section}{\numberline {1.1}Latar Belakang}{5}{section.3}%
+\contentsline {section}{\numberline {1.2}Tujuan}{5}{section.4}%
+\contentsline {section}{\numberline {1.3}Ruang Lingkup}{5}{section.11}%
+\contentsline {chapter}{\numberline {2}Deskripsi Aplikasi}{7}{chapter.12}%
+\contentsline {section}{\numberline {2.1}Gambaran Umum}{7}{section.13}%
+\contentsline {section}{\numberline {2.2}Fitur Utama}{7}{section.14}%
+\contentsline {section}{\numberline {2.3}Arsitektur Sistem}{8}{section.24}%
+\contentsline {chapter}{\numberline {3}Deskripsi Program}{10}{chapter.34}%
+\contentsline {section}{\numberline {3.1}Struktur Proyek}{10}{section.35}%
+\contentsline {section}{\numberline {3.2}Modul Program}{11}{section.66}%
+\contentsline {subsection}{\numberline {3.2.1}preprocessor.py}{11}{subsection.67}%
+\contentsline {subsection}{\numberline {3.2.2}parser.py}{11}{subsection.68}%
+\contentsline {subsection}{\numberline {3.2.3}indexer.py}{11}{subsection.69}%
+\contentsline {subsection}{\numberline {3.2.4}weighting.py}{12}{subsection.70}%
+\contentsline {subsection}{\numberline {3.2.5}retrieval.py}{12}{subsection.78}%
+\contentsline {subsection}{\numberline {3.2.6}word2vec\_engine.py}{12}{subsection.79}%
+\contentsline {subsection}{\numberline {3.2.7}query\_expansion.py}{13}{subsection.85}%
+\contentsline {subsection}{\numberline {3.2.8}evaluator.py}{13}{subsection.86}%
+\contentsline {subsection}{\numberline {3.2.9}api/main.py (Backend)}{13}{subsection.87}%
+\contentsline {section}{\numberline {3.3}Alur Program}{14}{section.88}%
+\contentsline {chapter}{\numberline {4}Library dan Dependencies}{15}{chapter.92}%
+\contentsline {section}{\numberline {4.1}Backend (Python)}{15}{section.93}%
+\contentsline {section}{\numberline {4.2}Word2Vec Model}{15}{section.95}%
+\contentsline {section}{\numberline {4.3}Frontend}{16}{section.96}%
+\contentsline {chapter}{\numberline {5}Hasil Eksperimen}{18}{chapter.98}%
+\contentsline {section}{\numberline {5.1}Setup Eksperimen}{18}{section.99}%
+\contentsline {section}{\numberline {5.2}Metrik Evaluasi}{18}{section.100}%
+\contentsline {subsection}{\numberline {5.2.1}Average Precision (AP)}{18}{subsection.101}%
+\contentsline {subsection}{\numberline {5.2.2}Mean Average Precision (MAP)}{18}{subsection.103}%
+\contentsline {section}{\numberline {5.3}Hasil Overall}{19}{section.105}%
+\contentsline {section}{\numberline {5.4}Hasil Per-Query (Sample)}{19}{section.107}%
+\contentsline {section}{\numberline {5.5}Analisis Perbandingan MAP Original vs Expanded Query}{19}{section.109}%
+\contentsline {subsection}{\numberline {5.5.1}Pengaruh Query Expansion terhadap MAP}{19}{subsection.110}%
+\contentsline {subsection}{\numberline {5.5.2}Query yang Mengalami Peningkatan Signifikan}{19}{subsection.111}%
+\contentsline {subsection}{\numberline {5.5.3}Query yang Mengalami Penurunan}{20}{subsection.112}%
+\contentsline {subsection}{\numberline {5.5.4}Pengaruh Skema Pembobotan}{20}{subsection.113}%
+\contentsline {subsection}{\numberline {5.5.5}Trade-off Recall dan Precision}{20}{subsection.114}%
+\contentsline {section}{\numberline {5.6}Screenshot Aplikasi}{21}{section.115}%
+\contentsline {chapter}{\numberline {6}Pembagian Tugas}{24}{chapter.120}%
+\contentsline {section}{\numberline {6.1}Anggota Kelompok}{24}{section.121}%
+\contentsline {section}{\numberline {6.2}Detail Tugas}{24}{section.123}%
+\contentsline {subsection}{\numberline {6.2.1}Programmer 1 - Orvin Andika Ikhsan Abhista (13523017)}{24}{subsection.124}%
+\contentsline {subsection}{\numberline {6.2.2}Programmer 2 - Fajar Kurniawan (13523027)}{24}{subsection.125}%
+\contentsline {subsection}{\numberline {6.2.3}Programmer 3 - Salman Hanif (13523056)}{25}{subsection.126}%
+\contentsline {subsection}{\numberline {6.2.4}Programmer 4 - Aryo Wisanggeni (13523100)}{25}{subsection.127}%
+\contentsline {subsection}{\numberline {6.2.5}Programmer 5 - Sabilul Huda (13523072)}{25}{subsection.128}%
+\contentsline {chapter}{\numberline {7}Kesimpulan}{27}{chapter.129}%
+\contentsline {section}{\numberline {7.1}Kesimpulan}{27}{section.130}%
+\contentsline {section}{\numberline {7.2}Saran Pengembangan}{27}{section.131}%
+\contentsline {chapter}{\numberline {8}Lampiran}{28}{chapter.141}%
+\contentsline {section}{\numberline {8.1}Cara Menjalankan Program}{28}{section.142}%
+\contentsline {subsection}{\numberline {8.1.1}Instalasi Backend}{28}{subsection.143}%
+\contentsline {subsection}{\numberline {8.1.2}Instalasi Frontend}{28}{subsection.150}%
+\contentsline {subsection}{\numberline {8.1.3}Menjalankan API Server}{28}{subsection.154}%
+\contentsline {subsection}{\numberline {8.1.4}Menjalankan Frontend}{28}{subsection.157}%
+\contentsline {subsection}{\numberline {8.1.5}Menjalankan Evaluasi}{28}{subsection.161}%
+\contentsline {subsection}{\numberline {8.1.6}Menjalankan dengan Query Expansion}{29}{subsection.164}%
+\contentsline {section}{\numberline {8.2}API Endpoints}{29}{section.171}%
+\contentsline {section}{\numberline {8.3}Referensi}{29}{section.173}%

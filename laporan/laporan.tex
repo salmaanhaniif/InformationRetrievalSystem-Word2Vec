@@ -1,8 +1,9 @@
 \documentclass[12pt,a4paper]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[english]{babel}
 \usepackage{graphicx}
-\usepackage{hyperref}
+\usepackage[hypertexnames=false]{hyperref}
 \usepackage{geometry}
 \usepackage{booktabs}
 \usepackage{listings}
@@ -10,6 +11,7 @@
 \usepackage{amsmath}
 \usepackage{float}
 \usepackage{titlesec}
+\usepackage{caption}
 
 \geometry{
     top=2.5cm,
@@ -27,42 +29,136 @@
     breaklines=true,
     captionpos=b,
     numbers=left,
-    numberstyle=\tiny\color{gray}
+    numberstyle=\tiny\color{gray},
+    literate={`}{{`}}1 {'}{{'}}1 {"}{{\textquotedbl}}1,
+    columns=flexible,
+    keepspaces=true
 }
 
-\title{
-    \vspace{2cm}
-    \textbf{\Huge Information Retrieval System}\\
-    \vspace{0.5cm}
-    \textbf{\Large dengan Word2Vec Query Expansion}
+\addto\extrasenglish{
+    \def\contentsname{Daftar Isi}
+    \def\listfigurename{Daftar Gambar}
+    \def\listtablename{Daftar Tabel}
+    \def\bibname{Daftar Pustaka}
+    \def\indexname{Indeks}
+    \def\figurename{Gambar}
+    \def\tablename{Tabel}
+    \def\chaptername{Bab}
+    \def\appendixname{Lampiran}
+    \def\abstractname{Abstrak}
 }
-\author{
-    \textbf{Kelompok 7}\\
-    \includegraphics[width=0.5\textwidth]{images/itb.jpg}
-    \vspace{0.5cm}
-    Orvin Andika Ikhsan Abhista (13523017)\\
-    Fajar Kurniawan (13523027)\\
-    Salman Hanif (13523056)\\
-    Aryo Wisanggeni (13523100)\\
-    Sabilul Huda (13523072)
-}
-\date{\today}
 
 \begin{document}
 
-\maketitle
-\thispagestyle{empty}
-
-\begin{figure}[H]
+% ============================================================================
+% HALAMAN JUDUL
+% ============================================================================
+\begin{titlepage}
     \centering
-    \includegraphics[width=0.8\textwidth]{images/itb.jpg}
-    \caption{Foto Anggota Kelompok}
-\end{figure}
+
+
+    {\Huge\textbf{Information Retrieval System}}\\
+    \vspace{0.3cm}
+    {\Large\textbf{dengan Word2Vec Query Expansion}}
+
+    \vspace{1cm}
+
+    \includegraphics[width=0.35\textwidth]{images/itb.jpg}
+
+    \vspace{1.5cm}
+
+    {\large Tugas Besar IF2210 Strategi Algoritma / IF2211 Retrieval Informasi}\\
+    \vspace{0.3cm}
+    {\large Semester [SEMESTER], Tahun Akademik [TAHUN]}
+
+    \vspace{2cm}
+
+    \begin{tabular}{lc}
+        \textbf{NIM} & \textbf{Nama} \\
+        \midrule
+        13523017 & Orvin Andika Ikhsan Abhista \\
+        13523027 & Fajar Kurniawan \\
+        13523056 & Salman Hanif \\
+        13523100 & Aryo Wisanggeni \\
+        13523072 & Sabilul Huda \\
+    \end{tabular}
+
+    \vspace{2cm}
+
+    {\large Program Studi Teknik Informatika}\\
+    {\large Sekolah Teknik Elektro dan Informatika}\\
+    {\large Institut Teknologi Bandung}
+
+    \vfill
+    {\large \today}
+\end{titlepage}
+
+\newpage
+% ============================================================================
+% FOTO INDIVIDU ANGGOTA KELOMPOK
+% ============================================================================
+\thispagestyle{empty}
+\begin{center}
+    \vspace*{1cm}
+    {\Large\textbf{Anggota Kelompok}}
+    \vspace{1.5cm}
+
+    % Row 1
+    \begin{minipage}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.75\textwidth]{images/person1.jpg}
+        \vspace{0.2cm}
+
+        \textbf{Orvin Andika Ikhsan Abhista}\\
+        13523017
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.75\textwidth]{images/person2.jpg}
+        \vspace{0.2cm}
+
+        \textbf{Fajar Kurniawan}\\
+        13523027
+    \end{minipage}
+
+    \vspace{1.5cm}
+
+    % Row 2
+    \begin{minipage}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.75\textwidth]{images/person3.jpg}
+        \vspace{0.2cm}
+
+        \textbf{Salman Hanif}\\
+        13523056
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.75\textwidth]{images/person4.jpg}
+        \vspace{0.2cm}
+
+        \textbf{Aryo Wisanggeni}\\
+        13523100
+    \end{minipage}
+
+    \vspace{1.5cm}
+
+    % Row 3
+    \begin{minipage}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.75\textwidth]{images/person5.jpg}
+        \vspace{0.2cm}
+
+        \textbf{Sabilul Huda}\\
+        13523072
+    \end{minipage}
+\end{center}
 
 \newpage
 \tableofcontents
 \newpage
-
 % ============================================================================
 \chapter{Pendahuluan}
 % ============================================================================
@@ -76,19 +172,23 @@ Proyek ini mengimplementasikan sistem IR dengan fitur query expansion berbasis W
 
 \section{Tujuan}
 \begin{enumerate}
-    \item Mengimplementasikan sistem IR berbasis TF-IDF cosine similarity
+    \item Mengimplementasikan sistem IR berbasis TF-IDF cosine similarity dengan 7 skema pembobotan
     \item Mengintegrasikan Word2Vec untuk semantic query expansion
     \item Mengevaluasi performa sistem menggunakan Mean Average Precision (MAP)
     \item Membandingkan hasil retrieval antara query original dan query expanded
+    \item Membangun REST API dengan caching untuk performa optimal
+    \item Menyediakan antarmuka web interaktif dengan dark mode
 \end{enumerate}
 
 \section{Ruang Lingkup}
 \begin{itemize}
     \item Dataset: CISI collection (1460 dokumen, 112 query, 76 query dengan qrels)
     \item Preprocessing: Lowercasing, tokenization, stopword removal, Porter stemming
-    \item Ranking: TF-IDF dengan cosine similarity
+    \item Ranking: TF-IDF dengan 7 skema pembobotan (tf\_raw, tf\_log, tf\_bin, tf\_aug, idf, tfidf, tfidf\_cos)
     \item Query Expansion: Word2Vec Google News 300 dimensions
-    \item Evaluasi: Mean Average Precision (MAP)
+    \item Evaluasi: Mean Average Precision (MAP) dengan caching 28 variasi konfigurasi
+    \item Backend: FastAPI dengan sistem cache (index dan MAP)
+    \item Frontend: React + Vite + TypeScript + TailwindCSS
 \end{itemize}
 
 % ============================================================================
@@ -99,37 +199,49 @@ Proyek ini mengimplementasikan sistem IR dengan fitur query expansion berbasis W
 Sistem ini adalah aplikasi Information Retrieval yang memungkinkan pengguna untuk:
 \begin{itemize}
     \item Mencari dokumen dari koleksi CISI menggunakan query teks
-    \item Melihat hasil retrieval dengan dan tanpa query expansion
+    \item Mengatur parameter pencarian (stemming, stopword, skema pembobotan, top-N, expand all)
+    \item Melihat hasil retrieval dengan dan tanpa query expansion secara side-by-side
     \item Mengeksplorasi term-term semantik yang ditambahkan oleh Word2Vec
-    \item Melihat evaluasi MAP untuk perbandingan performa
+    \item Melihat evaluasi MAP untuk perbandingan performa dengan breakdown per-query
+    \item Melakukan recalculate MAP untuk parameter tertentu atau seluruh 28 variasi
+    \item Rebuild index dan cache
 \end{itemize}
 
 \section{Fitur Utama}
 \begin{enumerate}
     \item \textbf{Document Parsing} - Parser untuk format dokumen CISI (.I, .T, .A, .W, .B tags)
     \item \textbf{Text Preprocessing} - Normalisasi, tokenisasi, stopword removal, stemming
-    \item \textbf{Inverted Index} - Pembangunan indeks terbalik untuk pencarian efisien
-    \item \textbf{TF-IDF Retrieval} - Ranking dokumen menggunakan TF-IDF cosine similarity
+    \item \textbf{Inverted Index} - Pembangunan indeks terbalik dengan caching per konfigurasi
+    \item \textbf{Multi-Scheme Weighting} - 7 skema pembobotan TF-IDF
     \item \textbf{Word2Vec Query Expansion} - Penambahan term semantik menggunakan model Word2Vec
     \item \textbf{MAP Evaluation} - Evaluasi performa menggunakan Mean Average Precision
+    \item \textbf{MAP Caching} - Cache 28 variasi konfigurasi (2 stemming x 2 stopword x 7 scheme)
     \item \textbf{REST API} - Endpoint API menggunakan FastAPI
-    \item \textbf{Web Interface} - Frontend interaktif (React/Vite)
+    \item \textbf{Web Interface} - Frontend interaktif dengan React, TypeScript, TailwindCSS, dan dark mode
 \end{enumerate}
 
 \section{Arsitektur Sistem}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{images/architecture.png}
+    \includegraphics[width=0.95\textwidth]{images/architecture.png}
     \caption{Diagram Arsitektur Sistem}
+    \label{fig:architecture}
 \end{figure}
+
+\begin{center}
+    \small\textit{Untuk melihat diagram interaktif dengan lebih jelas, buka:}\\
+    \url{https://drive.google.com/file/d/11KQ8GIy6OcdZTd91GShhfioWpK-M54hX/view?usp=sharing} 
+\end{center}
 
 Alur data sistem:
 \begin{enumerate}
-    \item User memasukkan query melalui web interface
-    \item Query dipreprocess (tokenize, stem, remove stopwords)
-    \item Word2Vec engine mencari term semantik serupa
-    \item Query expanded digunakan untuk retrieval TF-IDF
-    \item Hasil diurutkan berdasarkan cosine similarity
+    \item User memasukkan query dan mengatur parameter melalui web interface (React)
+    \item Request dikirim ke FastAPI backend via HTTP POST
+    \item Backend melakukan preprocessing pada query (tokenize, stem, remove stopwords)
+    \item Word2Vec engine mencari term semantik serupa untuk query expansion
+    \item Retrieval engine menghitung similarity menggunakan skema pembobotan yang dipilih
+    \item Hasil diurutkan berdasarkan similarity score dan dikembalikan ke frontend
+    \item MAP evaluation diambil dari cache (28 variasi pre-calculated)
     \item Hasil ditampilkan dengan perbandingan original vs expanded
 \end{enumerate}
 
@@ -145,16 +257,27 @@ InformationRetrievalSystem-Word2Vec/
 |   +-- preprocessor.py      # Text preprocessing
 |   +-- parser.py            # CISI document parser
 |   +-- indexer.py           # Inverted index builder
+|   +-- weighting.py         # 7 TF-IDF weighting schemes
+|   +-- retrieval.py         # Document ranking engine
 |   +-- word2vec_engine.py   # Word2Vec model wrapper
 |   +-- query_expansion.py   # Query expansion logic
 |   \-- evaluator.py         # MAP evaluation
 +-- api/
-|   \-- main.py              # FastAPI REST API
-+-- frontend/                # React web interface
+|   \-- main.py              # FastAPI REST API + caching
++-- frontend/                # React + Vite + TypeScript
 +-- data/
-|   +-- cisi.all             # Document collection
-|   +-- query.text           # Test queries
-|   \-- qrels.txt            # Relevance judgments
+|   +-- cisi.all             # Document collection (1460 docs)
+|   +-- query.text           # Test queries (112 queries)
+|   \-- qrels.txt            # Relevance judgments (76 queries)
++-- output/
+|   +-- index_*.pkl          # Cached inverted indices
+|   \-- map_cache.pkl        # Cached MAP results (28 variations)
++-- chart/
+|   \-- architecture.mermaid # Architecture diagram source
++-- laporan/
+|   +-- laporan.tex          # Laporan LaTeX
+|   +-- programmer_reference.md
+|   \-- images/              # Gambar dan foto
 +-- main.py                  # Entry point
 \-- pyproject.toml           # Dependencies
 \end{lstlisting}
@@ -165,10 +288,10 @@ InformationRetrievalSystem-Word2Vec/
 Modul ini menangani preprocessing teks dengan fungsi-fungsi:
 \begin{itemize}
     \item \texttt{preprocess(text, stemming, remove\_stopword)} - Fungsi utama preprocessing
-    \item \texttt{\_normalize\_text(text)} - Lowercase dan hapus karakter non-alfanumerik
-    \item \texttt{\_tokenize(text)} - Split teks menjadi token
-    \item \texttt{\_remove\_stopwords(tokens)} - Hapus stopwords English (NLTK)
-    \item \texttt{\_stem\_tokens(tokens)} - Porter Stemmer
+    \item \texttt{\_normalize\_text(text)} - Lowercase dan hapus karakter non-alfanumerik menggunakan regex
+    \item \texttt{\_tokenize(text)} - Split teks menjadi token berdasarkan spasi
+    \item \texttt{\_remove\_stopwords(tokens)} - Hapus stopwords English dari NLTK corpus
+    \item \texttt{\_stem\_tokens(tokens)} - Porter Stemmer dari NLTK
 \end{itemize}
 
 \subsection{parser.py}
@@ -177,16 +300,45 @@ Parser untuk format dokumen CISI:
     \item \texttt{parse\_docs(file\_path)} - Parse dokumen dari file
     \item \texttt{parse\_text(raw)} - Parse dokumen dari string
     \item Tags yang didukung: \texttt{.I} (ID), \texttt{.T} (Title), \texttt{.A} (Author), \texttt{.W} (Abstract), \texttt{.B} (Bibliography)
+    \item Normalisasi doc\_id ke format \texttt{DOC\#\#\#}
     \item Output: \texttt{dict[doc\_id, content]}
 \end{itemize}
 
 \subsection{indexer.py}
 Pembangunan inverted index:
 \begin{itemize}
-    \item \texttt{build\_index(docs)} - Build inverted index dari koleksi dokumen
-    \item \texttt{save\_index(index, file\_path)} - Simpan index ke JSON/Pickle
+    \item \texttt{build\_index(docs, stemming, remove\_stopword)} - Build inverted index
+    \item Struktur index: \texttt{dict[term, \{"df": int, "postings": \{doc\_id: tf\}\}]}
+    \item \texttt{save\_index(index, file\_path)} - Simpan index ke JSON atau Pickle
     \item \texttt{load\_index(file\_path)} - Load index dari file
     \item \texttt{get\_document\_terms(index, doc\_id)} - Get terms untuk dokumen tertentu
+\end{itemize}
+
+\subsection{weighting.py}
+Modul pembobotan term dengan 7 skema:
+\begin{itemize}
+    \item \texttt{get\_weight(term, doc\_id, scheme, index)} - Hitung bobot term untuk dokumen
+    \item \texttt{get\_n\_docs(index)} - Hitung jumlah dokumen dalam koleksi
+    \item Skema yang didukung:
+    \begin{enumerate}
+        \item \textbf{tf\_raw} - Term frequency mentah
+        \item \textbf{tf\_log} - $1 + \log(tf)$
+        \item \textbf{tf\_bin} - Binary (1 jika ada, 0 jika tidak)
+        \item \textbf{tf\_aug} - $0.5 + 0.5 \times \frac{tf}{max\_tf}$
+        \item \textbf{idf} - $\log(\frac{N}{df})$
+        \item \textbf{tfidf} - $(1 + \log(tf)) \times \log(\frac{N}{df})$
+        \item \textbf{tfidf\_cos} - TF-IDF dengan cosine normalization
+    \end{enumerate}
+\end{itemize}
+
+\subsection{retrieval.py}
+Engine untuk ranking dokumen:
+\begin{itemize}
+    \item \texttt{rank\_documents(query\_terms, index, scheme)} - Ranking dokumen berdasarkan similarity
+    \item \texttt{compute\_query\_weight(term, tf, max\_tf, n\_docs, df, scheme)} - Hitung bobot query term
+    \item Menggunakan \texttt{weighting.py} untuk perhitungan bobot
+    \item Untuk \texttt{tfidf\_cos}: melakukan cosine normalization pada query vector
+    \item Output: \texttt{list[(doc\_id, score)]} diurutkan descending
 \end{itemize}
 
 \subsection{word2vec\_engine.py}
@@ -194,54 +346,70 @@ Wrapper untuk model Word2Vec:
 \begin{itemize}
     \item \texttt{init\_engine()} - Inisialisasi singleton engine
     \item \texttt{get\_engine()} - Get engine instance
-    \item \texttt{Word2VecEngine.get\_similar(term, top\_n)} - Get semantically similar terms
+    \item \texttt{Word2VecEngine.get\_similar(term, top\_n)} - Get semantically similar terms dengan 5 filter:
+    \begin{enumerate}
+        \item Lowercase only (buang proper noun)
+        \item Buang kata dengan underscore
+        \item Buang kata terlalu pendek ($< 3$ karakter)
+        \item Buang kata yang terlalu mirip dengan input (substring match)
+        \item Buang kata terlalu panjang ($> 20$ karakter)
+    \end{enumerate}
     \item \texttt{Word2VecEngine.similarity(term1, term2)} - Cosine similarity dua kata
     \item \texttt{Word2VecEngine.train()} - Train model dari koleksi dokumen
-    \item Filter: lowercase only, no underscores, min length 3, no substring matches
+    \item \texttt{save\_disk\_cache()} - Simpan cache ke disk
 \end{itemize}
 
 \subsection{query\_expansion.py}
 Logika query expansion:
 \begin{itemize}
     \item \texttt{expand\_query(query\_terms, top\_n)} - Expand dengan batas term
-    \item \texttt{expand\_query\_all(query\_terms)} - Expand tanpa batas
-    \item \texttt{get\_expanded\_query\_terms()} - Get combined original + expanded terms
-    \item \texttt{format\_expansion\_detail()} - Format output untuk logging
+    \item \texttt{expand\_query\_all(query\_terms)} - Expand tanpa batas (top-50 similar per term)
+    \item \texttt{get\_expanded\_query\_terms(query\_terms, top\_n, expand\_all)} - Combine original + expanded
+    \item \texttt{format\_expansion\_detail(query\_terms, expanded, query\_id)} - Format output untuk logging
 \end{itemize}
 
 \subsection{evaluator.py}
 Evaluasi performa sistem:
 \begin{itemize}
-    \item \texttt{parse\_qrels(file\_path)} - Parse relevance judgments (auto-detect format)
+    \item \texttt{parse\_qrels(file\_path)} - Parse relevance judgments (auto-detect format: binary vs graded)
+    \item \texttt{parse\_queries(file\_path)} - Parse queries dari format CISI
     \item \texttt{compute\_ap(rankings, relevant\_docs)} - Average Precision per query
-    \item \texttt{compute\_map(rankings, qrels)} - Mean Average Precision
-    \item \texttt{run\_experiment()} - Run full experiment (original vs expanded)
-    \item \texttt{write\_report(results)} - Write evaluation report
+    \item \texttt{compute\_map(rankings, qrels)} - Mean Average Precision overall
+    \item \texttt{run\_experiment()} - Run full experiment dengan support untuk caching (docs dan inverted\_index dari caller)
+    \item \texttt{format\_report(results)} / \texttt{write\_report(results)} - Generate laporan evaluasi
+\end{itemize}
+
+\subsection{api/main.py (Backend)}
+FastAPI REST API dengan fitur caching:
+\begin{itemize}
+    \item \textbf{SystemState} - Global state untuk cache: docs, indices, map\_cache
+    \item \textbf{MAP Cache Persistence} - Simpan/load dari \texttt{output/map\_cache.pkl}
+    \item \textbf{Index Cache} - Simpan/load dari \texttt{output/index\_\{stemming\}\_\{stopword\}.pkl}
+    \item \textbf{Benchmark Loop} - Pre-calculate MAP untuk 28 variasi saat startup
+    \item \textbf{Endpoints:}
+    \begin{itemize}
+        \item \texttt{POST /api/search} - Search dengan query expansion
+        \item \texttt{POST /api/expand} - Preview expansion terms
+        \item \texttt{GET /api/index/\{doc\_id\}} - Get inverted index untuk dokumen
+        \item \texttt{GET /api/map} - Get MAP evaluation report
+        \item \texttt{POST /api/index/rebuild} - Hapus semua index dan cache
+        \item \texttt{POST /api/map/recalculate/single} - Recalculate MAP untuk 1 konfigurasi
+        \item \texttt{POST /api/map/recalculate/all} - Recalculate MAP untuk seluruh 28 variasi
+    \end{itemize}
 \end{itemize}
 
 \section{Alur Program}
 \begin{enumerate}
-    \item \textbf{Inisialisasi}: Load Word2Vec model via \texttt{init\_engine()}
-    \item \textbf{Parsing}: Parse dokumen CISI menjadi \texttt{dict[doc\_id, content]}
-    \item \textbf{Preprocessing}: Tokenize, stem, remove stopwords
-    \item \textbf{Indexing}: Build inverted index dengan term frequencies
-    \item \textbf{IDF Computation}: Hitung IDF untuk setiap term
-    \item \textbf{Query Processing}:
-    \begin{enumerate}
-        \item Preprocess query
-        \item Expand query dengan Word2Vec (opsional)
-        \item Compute TF-IDF vector untuk query
-    \end{enumerate}
-    \item \textbf{Retrieval}: Compute cosine similarity dengan semua dokumen
-    \item \textbf{Ranking}: Urutkan dokumen berdasarkan similarity score
-    \item \textbf{Evaluation}: Hitung MAP menggunakan qrels
+    \item \textbf{Startup}: Load Word2Vec model, parse dokumen CISI, load MAP cache, jalankan benchmark loop untuk 28 variasi
+    \item \textbf{Search Request}: Terima request, get/build cached index, preprocess query, expand query, rank dokumen, get MAP dari cache, return response
+    \item \textbf{Evaluation}: Untuk setiap query di qrels, preprocess, retrieve, compute AP, compute MAP
 \end{enumerate}
 
 % ============================================================================
 \chapter{Library dan Dependencies}
 % ============================================================================
 
-\section{Python Packages}
+\section{Backend (Python)}
 \begin{table}[H]
     \centering
     \begin{tabular}{@{}lll@{}}
@@ -249,15 +417,16 @@ Evaluasi performa sistem:
         \textbf{Package} & \textbf{Versi} & \textbf{Kegunaan} \\
         \midrule
         fastapi & $\geq$0.136.3 & REST API framework \\
-        uvicorn & $\geq$0.48.0 & ASGI server \\
+        uvicorn[standard] & $\geq$0.48.0 & ASGI server \\
         gensim & $\geq$4.4.0 & Word2Vec model implementation \\
         nltk & $\geq$3.9.4 & Tokenization, stopwords, Porter stemmer \\
         pysastrawi & $\geq$1.2.1 & Indonesian stemmer (opsional) \\
         pytest & $\geq$9.0.3 & Testing framework \\
         python-multipart & $\geq$0.0.30 & Form data parsing \\
+        pydantic & (bawaan fastapi) & Request/response validation \\
         \bottomrule
     \end{tabular}
-    \caption{Dependencies Python}
+    \caption{Dependencies Backend Python}
 \end{table}
 
 \section{Word2Vec Model}
@@ -271,8 +440,58 @@ Model yang digunakan: \texttt{word2vec-google-news-300}
 \end{itemize}
 
 \section{Frontend}
-% PLACEHOLDER_3: Detail frontend framework
-\textbf{[PLACEHOLDER\_3: Detail framework frontend (React/Vite, versi, dependencies)]}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{@{}lll@{}}
+        \toprule
+        \textbf{Package} & \textbf{Versi} & \textbf{Kegunaan} \\
+        \midrule
+        react & \textasciicircum 19.2.6 & UI library \\
+        react-dom & \textasciicircum 19.2.6 & React DOM rendering \\
+        typescript & \textasciicircum 6.0.3 & Type-safe JavaScript \\
+        vite & \textasciicircum 8.0.12 & Build tool dan dev server \\
+        tailwindcss & \textasciicircum 4.3.0 & Utility-first CSS framework \\
+        @tailwindcss/vite & \textasciicircum 4.3.0 & TailwindCSS Vite plugin \\
+        @vitejs/plugin-react & \textasciicircum 6.0.1 & React plugin untuk Vite \\
+        eslint & \textasciicircum 10.3.0 & Linting \\
+        \bottomrule
+    \end{tabular}
+    \caption{Dependencies Frontend}
+\end{table}
+
+Frontend dibangun menggunakan stack modern:
+\begin{itemize}
+    \item \textbf{React 19} - Library UI dengan component-based architecture
+    \item \textbf{TypeScript 6} - Type safety untuk seluruh kode frontend
+    \item \textbf{Vite 8} - Build tool yang cepat dengan HMR (Hot Module Replacement)
+    \item \textbf{TailwindCSS 4} - Utility-first CSS framework untuk styling
+    \item \textbf{Fetch API} - HTTP client untuk komunikasi dengan backend
+\end{itemize}
+
+Struktur komponen frontend:
+\begin{itemize}
+    \item \texttt{App.tsx} - Root component, merender \texttt{SearchPage}
+    \item \texttt{SearchPage.tsx} - Halaman utama dengan state management (params, activeTab, darkMode)
+    \item \texttt{ParameterPanel.tsx} - Sidebar kiri dengan toggle stemming/stopword, dropdown weighting, input top-N, checkbox expand all, dan tombol rebuild index
+    \item \texttt{SearchBar.tsx} - Input field untuk query dengan tombol search
+    \item \texttt{TabBar.tsx} - Tab navigation (Results, Expansion, MAP Report)
+    \item \texttt{ResultsTab.tsx} - Side-by-side comparison hasil original vs expanded dengan rank badge dan similarity score. Dokumen yang rank-nya membaik setelah expansion diberi highlight cyan
+    \item \texttt{ExpansionTab.tsx} - Tampilan query terms (original + expanded) dan tabel expansion terms dengan similarity bar
+    \item \texttt{MapReportTab.tsx} - Metric cards (MAP original/expanded dengan delta), tombol recalculate, dan tabel per-query breakdown
+    \item \texttt{EmptyState.tsx} - Tampilan awal dengan animasi glow
+    \item \texttt{useSearch.ts} - Custom hook untuk search dengan mock data fallback
+    \item \texttt{api/search.ts} - API client functions
+    \item \texttt{types/search.ts} - TypeScript interfaces
+\end{itemize}
+
+Fitur UI:
+\begin{itemize}
+    \item \textbf{Dark mode} - Toggle dark/light theme dengan persistensi di localStorage
+    \item \textbf{Responsive design} - Layout adaptif dengan TailwindCSS
+    \item \textbf{Loading states} - Spinner saat search dan recalculate
+    \item \textbf{Error handling} - Error banner dengan fallback ke mock data
+    \item \textbf{Improved highlighting} - Dokumen yang rank-nya membaik diberi highlight
+\end{itemize}
 
 % ============================================================================
 \chapter{Hasil Eksperimen}
@@ -283,10 +502,11 @@ Model yang digunakan: \texttt{word2vec-google-news-300}
     \item \textbf{Dataset}: CISI Collection
     \item \textbf{Jumlah Dokumen}: 1460
     \item \textbf{Jumlah Query}: 112 (76 dengan qrels)
-    \item \textbf{Preprocessing}: Stemming = True, Stopword Removal = True
-    \item \textbf{Ranking}: TF-IDF Cosine Similarity
+    \item \textbf{Preprocessing}: Stemming (True/False), Stopword Removal (True/False)
+    \item \textbf{Skema Pembobotan}: 7 skema (tf\_raw, tf\_log, tf\_bin, tf\_aug, idf, tfidf, tfidf\_cos)
     \item \textbf{Retrieval}: Top-100 documents per query
     \item \textbf{Query Expansion}: Top-5 similar terms per query term
+    \item \textbf{Total Variasi}: 28 (2 $\times$ 2 $\times$ 7)
 \end{itemize}
 
 \section{Metrik Evaluasi}
@@ -295,12 +515,7 @@ Average Precision mengukur kualitas ranking untuk satu query:
 \begin{equation}
     AP = \frac{1}{|R|} \sum_{k=1}^{n} P(k) \times rel(k)
 \end{equation}
-dimana:
-\begin{itemize}
-    \item $|R|$ = jumlah dokumen relevan
-    \item $P(k)$ = precision pada posisi ke-$k$
-    \item $rel(k)$ = 1 jika dokumen ke-$k$ relevan, 0 jika tidak
-\end{itemize}
+dimana $|R|$ = jumlah dokumen relevan, $P(k)$ = precision pada posisi ke-$k$, $rel(k)$ = 1 jika dokumen ke-$k$ relevan.
 
 \subsection{Mean Average Precision (MAP)}
 Mean Average Precision adalah rata-rata AP dari semua query:
@@ -314,17 +529,17 @@ dimana $|Q|$ = jumlah query.
     \centering
     \begin{tabular}{@{}lcc@{}}
         \toprule
-        \textbf{Metrik} & \textbf{Original} & \textbf{Expanded} \\
+        \textbf{Konfigurasi} & \textbf{MAP Original} & \textbf{MAP Expanded} \\
         \midrule
-        MAP & 0.1791 & 0.1791 \\
+        stemming=T, stopword=T, tfidf\_cos & 0.1791 & [PLACEHOLDER\_MAP\_EXPANDED] \\
         \bottomrule
     \end{tabular}
-    \caption{Hasil MAP Overall}
+    \caption{Hasil MAP Overall (stemming=True, stopword=True, tfidf\_cos)}
 \end{table}
 
-\textbf{Catatan:} Hasil di atas dijalankan tanpa query expansion (Word2Vec model belum di-load). Untuk hasil dengan query expansion, jalankan eksperimen dengan \texttt{use\_expansion=True} setelah menginisialisasi Word2Vec engine.
+\textbf{Catatan:} Nilai MAP Expanded perlu diisi setelah menjalankan eksperimen dengan \texttt{use\_expansion=True} dan Word2Vec engine yang sudah diinisialisasi.
 
-\section{Hasil Per-Query}
+\section{Hasil Per-Query (Sample)}
 \begin{table}[H]
     \centering
     \small
@@ -333,14 +548,7 @@ dimana $|Q|$ = jumlah query.
         \textbf{Query} & \textbf{AP Original} & \textbf{Relevant Docs} \\
         \midrule
         1 & 0.2809 & 46 \\
-        2 & 0.0094 & 26 \\
-        3 & 0.2216 & 44 \\
-        4 & 0.0674 & 8 \\
-        5 & 0.0162 & 24 \\
         10 & 0.2796 & 26 \\
-        11 & 0.0727 & 127 \\
-        20 & 0.0319 & 144 \\
-        44 & 0.1110 & 155 \\
         50 & 0.3016 & 89 \\
         52 & 0.7053 & 15 \\
         55 & 0.8625 & 18 \\
@@ -356,39 +564,67 @@ dimana $|Q|$ = jumlah query.
     \caption{Sample Hasil AP Per-Query (Top Queries)}
 \end{table}
 
-\section{Analisis Perbandingan MAP Original vs Expanded}
-% PLACEHOLDER_4: Analisis lengkap setelah menjalankan eksperimen dengan query expansion
-\textbf{[PLACEHOLDER\_4: Analisis perbandingan MAP original vs expanded query]}
+\section{Analisis Perbandingan MAP Original vs Expanded Query}
 
-\textit{Template analisis yang perlu diisi setelah menjalankan eksperimen dengan Word2Vec:}
-\begin{enumerate}
-    \item Apakah query expansion meningkatkan MAP? Berapa persen perubahannya?
-    \item Query mana yang mengalami peningkatan signifikan? Mengapa?
-    \item Query mana yang mengalami penurunan? Mengapa?
-    \item Apakah ada pola tertentu pada query yang beneficia dari expansion?
-    \item Bagaimana trade-off antara recall dan precision?
-\end{enumerate}
+\subsection{Pengaruh Query Expansion terhadap MAP}
+Query expansion menggunakan Word2Vec bertujuan untuk menambahkan term-term yang secara semantik mirip dengan term original query. Secara teoritis, ini meningkatkan recall karena sistem dapat menemukan dokumen yang tidak mengandung term original tetapi mengandung term semantik yang relevan.
+
+[PLACEHOLDER\_ANALISIS\_1: Apakah MAP meningkat atau menurun setelah query expansion? Berapa persen perubahannya?]
+
+\subsection{Query yang Mengalami Peningkatan Signifikan}
+Query dengan term yang memiliki representasi Word2Vec yang baik (kata-kata umum dalam vocabulary Google News) cenderung beneficia dari expansion.
+
+[PLACEHOLDER\_ANALISIS\_2: Sebutkan query yang mengalami peningkatan AP signifikan dan jelaskan mengapa.]
+
+\subsection{Query yang Mengalami Penurunan}
+Penurunan MAP dapat terjadi ketika:
+\begin{itemize}
+    \item Term expansion yang ditambahkan tidak relevan dengan konteks query
+    \item Query sudah spesifik dan expansion menambahkan noise
+    \item Term query tidak ada dalam vocabulary Word2Vec (OOV)
+\end{itemize}
+
+[PLACEHOLDER\_ANALISIS\_3: Sebutkan query yang mengalami penurunan AP dan jelaskan mengapa.]
+
+\subsection{Pengaruh Skema Pembobotan}
+Sistem mengimplementasikan 7 skema pembobotan:
+\begin{itemize}
+    \item \textbf{tf\_raw} dan \textbf{tf\_bin} - Sederhana, kurang memperhitungkan pentingnya term
+    \item \textbf{tf\_log} dan \textbf{tf\_aug} - Memberikan penalti pada term yang terlalu sering muncul
+    \item \textbf{idf} - Hanya mempertimbangkan keunikan term
+    \item \textbf{tfidf} dan \textbf{tfidf\_cos} - Menggabungkan TF dan IDF dengan normalisasi
+\end{itemize}
+
+[PLACEHOLDER\_ANALISIS\_4: Skema mana yang memberikan MAP terbaik?]
+
+\subsection{Trade-off Recall dan Precision}
+Query expansion umumnya meningkatkan recall tetapi dapat menurunkan precision. MAP sebagai metrik yang menggabungkan keduanya memberikan gambaran yang seimbang.
+
+[PLACEHOLDER\_ANALISIS\_5: Apakah trade-off ini terlihat pada hasil eksperimen?]
 
 \section{Screenshot Aplikasi}
 \begin{figure}[H]
     \centering
-    % PLACEHOLDER_5: Screenshot halaman utama aplikasi
-    \fbox{\parbox{0.8\textwidth}{\centering\vspace{3cm}\textbf{[PLACEHOLDER\_5: Screenshot Halaman Utama]}\vspace{3cm}}}
+    \includegraphics[width=0.9\textwidth]{images/screenshot_main.png}
     \caption{Tampilan Halaman Utama Aplikasi}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    % PLACEHOLDER_6: Screenshot hasil pencarian
-    \fbox{\parbox{0.8\textwidth}{\centering\vspace{3cm}\textbf{[PLACEHOLDER\_6: Screenshot Hasil Pencarian]}\vspace{3cm}}}
-    \caption{Tampilan Hasil Pencarian}
+    \includegraphics[width=0.9\textwidth]{images/screenshot_results.png}
+    \caption{Tampilan Hasil Pencarian (Side-by-side Comparison)}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    % PLACEHOLDER_7: Screenshot query expansion
-    \fbox{\parbox{0.8\textwidth}{\centering\vspace{3cm}\textbf{[PLACEHOLDER\_7: Screenshot Query Expansion]}\vspace{3cm}}}
+    \includegraphics[width=0.9\textwidth]{images/screenshot_expansion.png}
     \caption{Tampilan Query Expansion}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/screenshot_map.png}
+    \caption{Tampilan MAP Report}
 \end{figure}
 
 % ============================================================================
@@ -406,7 +642,7 @@ dimana $|Q|$ = jumlah query.
         13523027 & Fajar Kurniawan & Programmer 2 & \texttt{indexer.py} \\
         13523056 & Salman Hanif & Programmer 3 & \texttt{word2vec\_engine.py} \\
         13523100 & Aryo Wisanggeni & Programmer 4 & \texttt{query\_expansion.py} \\
-        13523072 & Sabilul Huda & Programmer 5 & \texttt{evaluator.py}, Laporan \\
+        13523072 & Sabilul Huda & Programmer 5 & \texttt{evaluator.py}, \texttt{weighting.py}, \texttt{retrieval.py}, Laporan \\
         \bottomrule
     \end{tabular}
     \caption{Pembagian Tugas Anggota Kelompok}
@@ -417,10 +653,10 @@ dimana $|Q|$ = jumlah query.
 \subsection{Programmer 1 - Orvin Andika Ikhsan Abhista (13523017)}
 \textbf{Tanggung Jawab:} Preprocessing dan Parsing
 \begin{itemize}
-    \item Implementasi text normalization (lowercase, remove punctuation)
-    \item Implementasi tokenization
+    \item Implementasi text normalization (lowercase, remove punctuation via regex)
+    \item Implementasi tokenization (split on space)
     \item Integrasi NLTK stopwords removal
-    \item Integrasi Porter Stemmer
+    \item Integrasi Porter Stemmer dari NLTK
     \item Parser format dokumen CISI (.I, .T, .A, .W, .B tags)
     \item Normalisasi document ID ke format DOC\#\#\#
 \end{itemize}
@@ -429,7 +665,8 @@ dimana $|Q|$ = jumlah query.
 \textbf{Tanggung Jawab:} Inverted Index
 \begin{itemize}
     \item Build inverted index dari koleksi dokumen
-    \item Term frequency counting
+    \item Struktur index: \texttt{dict[term, \{"df", "postings"\}]}
+    \item Term frequency counting per dokumen
     \item Document frequency tracking
     \item Save/load index (JSON dan Pickle format)
     \item Document terms retrieval
@@ -441,9 +678,10 @@ dimana $|Q|$ = jumlah query.
     \item Wrapper Word2Vec model (gensim)
     \item Load pre-trained model dari gensim downloader
     \item Train model dari koleksi dokumen
-    \item Implementasi \texttt{get\_similar()} dengan filtering
+    \item Implementasi \texttt{get\_similar()} dengan 5 filter
     \item Implementasi \texttt{similarity()} untuk dua kata
     \item Singleton pattern untuk engine instance
+    \item \texttt{save\_disk\_cache()} untuk persistensi cache
 \end{itemize}
 
 \subsection{Programmer 4 - Aryo Wisanggeni (13523100)}
@@ -452,17 +690,19 @@ dimana $|Q|$ = jumlah query.
     \item Implementasi \texttt{expand\_query()} dengan Word2Vec
     \item Implementasi \texttt{expand\_query\_all()} untuk unlimited expansion
     \item Implementasi \texttt{get\_expanded\_query\_terms()} helper
-    \item Format expansion detail untuk output
+    \item Format expansion detail untuk output/logging
     \item Handling OOV (out-of-vocabulary) terms
 \end{itemize}
 
 \subsection{Programmer 5 - Sabilul Huda (13523072)}
-\textbf{Tanggung Jawab:} Evaluasi dan Laporan
+\textbf{Tanggung Jawab:} Evaluasi, Retrieval, Weighting, dan Laporan
 \begin{itemize}
+    \item Implementasi \texttt{weighting.py} - 7 skema pembobotan TF-IDF
+    \item Implementasi \texttt{retrieval.py} - Document ranking dengan cosine similarity
     \item Implementasi \texttt{compute\_ap()} untuk Average Precision per query
     \item Implementasi \texttt{compute\_map()} untuk MAP overall
     \item Parser qrels (auto-detect format binary/graded)
-    \item Experiment runner (original vs expanded)
+    \item Experiment runner dengan support untuk caching
     \item Report generation
     \item Koordinasi penulisan laporan
     \item Programmer's Reference
@@ -473,15 +713,15 @@ dimana $|Q|$ = jumlah query.
 % ============================================================================
 
 \section{Kesimpulan}
-% PLACEHOLDER_8: Kesimpulan akhir setelah eksperimen lengkap
-\textbf{[PLACEHOLDER\_8: Kesimpulan akhir setelah menjalankan eksperimen dengan query expansion]}
+[PLACEHOLDER\_KESIMPULAN: Kesimpulan akhir setelah menjalankan eksperimen dengan query expansion]
 
 \textit{Template yang perlu diisi:}
 \begin{itemize}
-    \item Apakah sistem IR berhasil diimplementasikan?
-    \item Bagaimana performa sistem (MAP score)?
-    \item Apakah query expansion memberikan peningkatan?
-    \item Apa kelebihan dan kekurangan sistem ini?
+    \item Sistem IR berhasil diimplementasikan dengan 7 skema pembobotan TF-IDF dan query expansion berbasis Word2Vec
+    \item Performa sistem diukur menggunakan MAP pada dataset CISI (1460 dokumen, 76 query dengan qrels)
+    \item MAP baseline (original query) dengan konfigurasi stemming=True, stopword=True, tfidf\_cos adalah 0.1791
+    \item Query expansion [meningkatkan/menurunkan] MAP sebesar [X]\%
+    \item Sistem dilengkapi dengan caching untuk 28 variasi konfigurasi, REST API (FastAPI), dan web interface (React + TypeScript)
 \end{itemize}
 
 \section{Saran Pengembangan}
@@ -489,10 +729,12 @@ dimana $|Q|$ = jumlah query.
     \item Implementasi relevance feedback (Rocchio algorithm)
     \item Penambahan ranking algorithm BM25
     \item Support untuk dataset lain (Cranfield, Medline)
-    \item Optimasi performa dengan index caching
+    \item Optimasi performa dengan vectorized computation
     \item Docker containerization untuk deployment
     \item Unit tests coverage $>$ 80\%
-    \item UI/UX improvement pada frontend
+    \item UI/UX improvement pada frontend (mobile responsive, search history)
+    \item Implementasi snippet generation untuk search results
+    \item Support untuk Indonesian language processing (pysaStrawi integration)
 \end{enumerate}
 
 % ============================================================================
@@ -501,7 +743,7 @@ dimana $|Q|$ = jumlah query.
 
 \section{Cara Menjalankan Program}
 
-\subsection{Instalasi}
+\subsection{Instalasi Backend}
 \begin{lstlisting}[language=bash]
 # Install dependencies
 uv sync
@@ -510,9 +752,21 @@ uv sync
 python -c "import nltk; nltk.download('stopwords'); nltk.download('punkt')"
 \end{lstlisting}
 
+\subsection{Instalasi Frontend}
+\begin{lstlisting}[language=bash]
+cd frontend
+npm install
+\end{lstlisting}
+
 \subsection{Menjalankan API Server}
 \begin{lstlisting}[language=bash]
 uv run uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
+\end{lstlisting}
+
+\subsection{Menjalankan Frontend}
+\begin{lstlisting}[language=bash]
+cd frontend
+npm run dev
 \end{lstlisting}
 
 \subsection{Menjalankan Evaluasi}
@@ -530,13 +784,25 @@ results = run_experiment(use_expansion=True)
 \end{lstlisting}
 
 \section{API Endpoints}
-\begin{itemize}
-    \item \texttt{GET /} - Health check
-    \item \texttt{POST /api/search} - Search dengan query expansion
-    \item \texttt{POST /api/expand} - Preview expansion terms
-    \item \texttt{GET /api/index/\{doc\_id\}} - Get inverted index
-    \item \texttt{GET /api/map} - Get MAP evaluation report
-\end{itemize}
+\begin{table}[H]
+    \centering
+    \small
+    \begin{tabular}{@{}lll@{}}
+        \toprule
+        \textbf{Method} & \textbf{Endpoint} & \textbf{Deskripsi} \\
+        \midrule
+        GET & \texttt{/} & Health check \\
+        POST & \texttt{/api/search} & Search dengan query expansion \\
+        POST & \texttt{/api/expand} & Preview expansion terms \\
+        GET & \texttt{/api/index/\{doc\_id\}} & Get inverted index \\
+        GET & \texttt{/api/map} & Get MAP evaluation report \\
+        POST & \texttt{/api/index/rebuild} & Hapus semua index dan cache \\
+        POST & \texttt{/api/map/recalculate/single} & Recalculate MAP 1 konfigurasi \\
+        POST & \texttt{/api/map/recalculate/all} & Recalculate MAP 28 variasi \\
+        \bottomrule
+    \end{tabular}
+    \caption{API Endpoints}
+\end{table}
 
 \section{Referensi}
 \begin{enumerate}
@@ -547,38 +813,8 @@ results = run_experiment(use_expansion=True)
     \item Gensim Documentation: \url{https://radimrehurek.com/gensim/}
     \item NLTK Documentation: \url{https://www.nltk.org/}
     \item FastAPI Documentation: \url{https://fastapi.tiangolo.com/}
+    \item React Documentation: \url{https://react.dev/}
+    \item TailwindCSS Documentation: \url{https://tailwindcss.com/}
 \end{enumerate}
-
-\section{Foto Anggota}
-% PLACEHOLDER_9: Foto individual anggota kelompok
-\begin{figure}[H]
-    \centering
-    \fbox{\parbox{0.3\textwidth}{\centering\vspace{2cm}\textbf{[PLACEHOLDER\_9a: Foto Orvin Andika]}\vspace{2cm}}}
-    \caption{Orvin Andika Ikhsan Abhista (13523017)}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \fbox{\parbox{0.3\textwidth}{\centering\vspace{2cm}\textbf{[PLACEHOLDER\_9b: Foto Fajar Kurniawan]}\vspace{2cm}}}
-    \caption{Fajar Kurniawan (13523027)}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \fbox{\parbox{0.3\textwidth}{\centering\vspace{2cm}\textbf{[PLACEHOLDER\_9c: Foto Salman Hanif]}\vspace{2cm}}}
-    \caption{Salman Hanif (13523056)}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \fbox{\parbox{0.3\textwidth}{\centering\vspace{2cm}\textbf{[PLACEHOLDER\_9d: Foto Aryo Wisanggeni]}\vspace{2cm}}}
-    \caption{Aryo Wisanggeni (13523100)}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \fbox{\parbox{0.3\textwidth}{\centering\vspace{2cm}\textbf{[PLACEHOLDER\_9e: Foto Sabilul Huda]}\vspace{2cm}}}
-    \caption{Sabilul Huda (13523072)}
-\end{figure}
 
 \end{document}
