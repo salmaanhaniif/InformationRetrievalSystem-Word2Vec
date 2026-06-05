@@ -524,56 +524,74 @@ Mean Average Precision adalah rata-rata AP dari semua query:
 dimana $|Q|$ = jumlah query.
 
 \section{Hasil Overall}
+
+Tabel berikut merangkum hasil evaluasi MAP untuk seluruh konfigurasi preprocessing dengan skema pembobotan \texttt{tfidf\_cos}:
+
 \begin{table}[H]
     \centering
-    \begin{tabular}{@{}lcc@{}}
-        \toprule
-        \textbf{Konfigurasi} & \textbf{MAP Original} & \textbf{MAP Expanded} \\
-        \midrule
-        stemming=T, stopword=T, tfidf\_cos & 0.1791 & [PLACEHOLDER\_MAP\_EXPANDED] \\
-        \bottomrule
-    \end{tabular}
-    \caption{Hasil MAP Overall (stemming=True, stopword=True, tfidf\_cos)}
+\begin{tabular}{@{}cccccc@{}}
+    \toprule
+    \textbf{Stemming} & \textbf{Stopword} & \textbf{MAP Original} & \textbf{MAP Expanded} & \textbf{Selisih} & \textbf{Perubahan} \\
+    \midrule
+    T & T & 0.1680 & 0.1790 & +0.0110 & +6.55\% \\
+    T & F & 0.1746 & 0.1625 & $-$0.0121 & $-$6.93\% \\
+    F & T & 0.1661 & 0.1456 & $-$0.0205 & $-$12.34\% \\
+    F & F & 0.1616 & 0.1434 & $-$0.0182 & $-$11.26\% \\
+    \bottomrule
+\end{tabular}
+\caption{Hasil MAP Overall untuk Seluruh Konfigurasi Preprocessing (skema \texttt{tfidf\_cos})}
+\label{tab:map_overall}
 \end{table}
 
-\textbf{Catatan:} Nilai MAP Expanded perlu diisi setelah menjalankan eksperimen dengan \texttt{use\_expansion=True} dan Word2Vec engine yang sudah diinisialisasi.
+Dari keempat konfigurasi, hanya konfigurasi \texttt{stemming=True, stopword=True} yang menunjukkan peningkatan MAP setelah query expansion (dari 0.1680 menjadi 0.1790, naik 6.55\%). Tiga konfigurasi lainnya mengalami penurunan, dengan penurunan terbesar terjadi pada konfigurasi tanpa stemming dan tanpa stopword removal.
 
-\section{Hasil Per-Query (Sample)}
+\subsection{Query dengan Peningkatan AP Signifikan}
+
+Beberapa query menunjukkan peningkatan Average Precision yang cukup signifikan setelah query expansion. Berikut adalah query-query dengan peningkatan AP tertinggi:
+
 \begin{table}[H]
     \centering
-    \small
-    \begin{tabular}{@{}lcc@{}}
+    \begin{tabular}{@{}lcccc@{}}
         \toprule
-        \textbf{Query} & \textbf{AP Original} & \textbf{Relevant Docs} \\
+        \textbf{Konfigurasi} & \textbf{Query ID} & \textbf{AP Original} & \textbf{AP Expanded} & \textbf{Selisih} \\
         \midrule
-        1 & 0.2809 & 46 \\
-        10 & 0.2796 & 26 \\
-        50 & 0.3016 & 89 \\
-        52 & 0.7053 & 15 \\
-        55 & 0.8625 & 18 \\
-        62 & 0.5986 & 12 \\
-        65 & 0.4708 & 13 \\
-        66 & 0.4796 & 35 \\
-        97 & 0.5507 & 6 \\
-        102 & 0.4578 & 24 \\
-        109 & 0.2014 & 71 \\
-        111 & 0.5788 & 6 \\
+        \multirow{3}{*}{Tanpa stemming \& stopword} & 111 & 0.3362 & 0.3802 & +0.0440 \\
+        & 19  & 0.1663 & 0.2096 & +0.0433 \\
+        & 37  & 0.0297 & 0.0526 & +0.0229 \\
+        \midrule
+        Stopword tanpa stemming & 19  & 0.1681 & 0.2094 & +0.0413 \\
         \bottomrule
     \end{tabular}
-    \caption{Sample Hasil AP Per-Query (Top Queries)}
+    \caption{Query dengan Peningkatan AP Tertinggi Setelah Query Expansion}
+    \label{tab:ap_increase}
 \end{table}
+
+Query 19 secara konsisten menunjukkan peningkatan pada dua konfigurasi berbeda (tanpa stemming/stopword dan stopword tanpa stemming), mengindikasikan bahwa term dalam query ini memiliki representasi Word2Vec yang baik sehingga expansion menambahkan term semantik yang benar-benar relevan. Query 111 juga mencatat peningkatan tertinggi (+0.0440), menunjukkan bahwa expansion mampu menangkap variasi terminologi dari topik yang sama.
 
 \section{Analisis Perbandingan MAP Original vs Expanded Query}
 
 \subsection{Pengaruh Query Expansion terhadap MAP}
 Query expansion menggunakan Word2Vec bertujuan untuk menambahkan term-term yang secara semantik mirip dengan term original query. Secara teoritis, ini meningkatkan recall karena sistem dapat menemukan dokumen yang tidak mengandung term original tetapi mengandung term semantik yang relevan.
 
-[PLACEHOLDER\_ANALISIS\_1: Apakah MAP meningkat atau menurun setelah query expansion? Berapa persen perubahannya?]
+Berdasarkan hasil eksperimen pada Tabel~\ref{tab:map_overall}, query expansion menunjukkan dampak yang bervariasi terhadap MAP bergantung pada konfigurasi preprocessing:
+\begin{itemize}
+    \item Pada konfigurasi \textbf{stemming=True, stopword=True}, MAP meningkat sebesar \textbf{+6.55\%} (dari 0.1680 menjadi 0.1790). Ini adalah satu-satunya konfigurasi yang menunjukkan peningkatan setelah expansion.
+    \item Pada konfigurasi \textbf{stemming=True, stopword=False}, MAP menurun sebesar \textbf{-6.93\%} (dari 0.1746 menjadi 0.1625).
+    \item Pada konfigurasi \textbf{stemming=False, stopword=True}, MAP menurun sebesar \textbf{-12.34\%} (dari 0.1661 menjadi 0.1456).
+    \item Pada konfigurasi \textbf{stemming=False, stopword=False}, MAP menurun sebesar \textbf{-11.26\%} (dari 0.1616 menjadi 0.1434).
+\end{itemize}
+Secara keseluruhan, query expansion hanya memberikan perbaikan ketika stemming dan stopword removal diterapkan bersamaan. Hal ini menunjukkan bahwa tanpa normalisasi (stemming) dan pembersihan noise (stopword), term-term expansion justru menambah distraksi yang menurunkan performa retrieval.
 
 \subsection{Query yang Mengalami Peningkatan Signifikan}
 Query dengan term yang memiliki representasi Word2Vec yang baik (kata-kata umum dalam vocabulary Google News) cenderung beneficia dari expansion.
 
-[PLACEHOLDER\_ANALISIS\_2: Sebutkan query yang mengalami peningkatan AP signifikan dan jelaskan mengapa.]
+Berdasarkan Tabel~\ref{tab:ap_increase}, tiga query yang mengalami peningkatan AP signifikan adalah:
+\begin{itemize}
+    \item \textbf{Query 111} (+0.0440, tanpa stemming \& stopword): AP naik dari 0.3362 ke 0.3802. Term dalam query ini kemungkinan besar adalah kata-kata umum yang memiliki banyak tetangga semantik relevan di ruang vektor Word2Vec Google News.
+    \item \textbf{Query 19} (+0.0433 tanpa stemming/stopword, +0.0413 dengan stopword tanpa stemming): Query ini menunjukkan peningkatan konsisten di dua konfigurasi berbeda. Ini mengindikasikan bahwa topik query memiliki cakupan terminologi yang luas, sehingga sinonim dan istilah terkait yang ditambahkan oleh Word2Vec benar-benar membantu menemukan dokumen relevan yang tidak mengandung term original.
+    \item \textbf{Query 37} (+0.0229, tanpa stemming \& stopword): AP naik dari 0.0297 ke 0.0526. Meskipun nilai absolutnya masih rendah, peningkatan relatifnya cukup besar, menunjukkan bahwa expansion membantu sistem menemukan setidaknya beberapa dokumen relevan yang sebelumnya terlewat.
+\end{itemize}
+Faktor kunci keberhasilan expansion pada query-query ini adalah keberadaan term-term dengan representasi vektor yang kuat dalam Word2Vec (tidak OOV) dan topik query yang cukup luas sehingga variasi terminologi di koleksi dokumen dapat dijangkau oleh term expansion.
 
 \subsection{Query yang Mengalami Penurunan}
 Penurunan MAP dapat terjadi ketika:
@@ -583,7 +601,14 @@ Penurunan MAP dapat terjadi ketika:
     \item Term query tidak ada dalam vocabulary Word2Vec (OOV)
 \end{itemize}
 
-[PLACEHOLDER\_ANALISIS\_3: Sebutkan query yang mengalami penurunan AP dan jelaskan mengapa.]
+Sebagian besar query mengalami penurunan AP setelah query expansion, yang terlihat dari fakta bahwa 3 dari 4 konfigurasi preprocessing menunjukkan penurunan MAP secara keseluruhan. Penurunan ini disebabkan oleh beberapa faktor:
+\begin{itemize}
+    \item \textbf{Out-of-Vocabulary (OOV)}: Term query yang tidak ada dalam vocabulary Word2Vec Google News tidak dapat menghasilkan expansion, sehingga query tersebut tidak menerima manfaat apapun sementara query lain yang mendapatkan expansion bisa saja menambah noise.
+    \item \textbf{Noise dari term expansion}: Beberapa term yang ditambahkan oleh Word2Vec memiliki kemiripan semantik yang terlalu umum atau berada di domain yang berbeda dengan konteks query. Misalnya, kata ``bank'' bisa berarti lembaga keuangan atau tepi sungai---jika query merujuk ke dunia finansial tetapi expansion menambahkan term geografis, maka precision akan turun.
+    \item \textbf{Over-expansion}: Menambahkan terlalu banyak term (top-5 per query term) menyebabkan query menjadi terlalu umum dan mengambil dokumen yang tidak relevan, menurunkan precision secara signifikan.
+    \item \textbf{Ketidakadaan stemming}: Tanpa stemming, term expansion dan term indeks mungkin berada dalam bentuk morfologis yang berbeda (misalnya ``compute'' vs ``computation''), sehingga pencocokan gagal meskipun secara semantik relevan.
+\end{itemize}
+Konfigurasi \texttt{stemming=False, stopword=True} mengalami penurunan terbesar (-12.34\%), menunjukkan bahwa tanpa stemming, noise dari variasi morfologis memperburuk efek negatif expansion.
 
 \subsection{Pengaruh Skema Pembobotan}
 Sistem mengimplementasikan 7 skema pembobotan:
@@ -594,12 +619,22 @@ Sistem mengimplementasikan 7 skema pembobotan:
     \item \textbf{tfidf} dan \textbf{tfidf\_cos} - Menggabungkan TF dan IDF dengan normalisasi
 \end{itemize}
 
-[PLACEHOLDER\_ANALISIS\_4: Skema mana yang memberikan MAP terbaik?]
+Eksperimen dilakukan dengan satu skema pembobotan (\texttt{tfidf\_cos}) untuk membandingkan pengaruh preprocessing dan query expansion secara terisolasi. Dari keempat konfigurasi preprocessing:
+\begin{itemize}
+    \item \textbf{MAP original terbaik}: 0.1746 (stemming=T, stopword=F)
+    \item \textbf{MAP expanded terbaik}: 0.1790 (stemming=T, stopword=T)
+\end{itemize}
+Hasil ini menunjukkan bahwa untuk retrieval tanpa expansion, mempertahankan stopwords memberikan sedikit keunggulan karena beberapa stopwords dapat berfungsi sebagai konteks (misalnya ``to be or not to be'' sebagai frase spesifik). Namun, untuk query expansion, menghilangkan stopwords menjadi krusial karena stopwords menghasilkan expansion term yang tidak bermakna dan menambah noise. Kombinasi \texttt{tfidf\_cos} dengan stemming dan stopword removal memberikan keseimbangan terbaik antara precision dan recall setelah expansion.
 
 \subsection{Trade-off Recall dan Precision}
 Query expansion umumnya meningkatkan recall tetapi dapat menurunkan precision. MAP sebagai metrik yang menggabungkan keduanya memberikan gambaran yang seimbang.
 
-[PLACEHOLDER\_ANALISIS\_5: Apakah trade-off ini terlihat pada hasil eksperimen?]
+Ya, trade-off ini sangat terlihat pada hasil eksperimen. Pada 3 dari 4 konfigurasi preprocessing, query expansion menurunkan MAP, yang menunjukkan bahwa penurunan precision lebih dominan daripada peningkatan recall. Hanya pada konfigurasi \texttt{stemming=True, stopword=True} peningkatan recall berhasil mengkompensasi penurunan precision, menghasilkan MAP yang lebih tinggi secara keseluruhan. Hal ini menegaskan bahwa:
+\begin{itemize}
+    \item Query expansion efektif meningkatkan recall (menemukan lebih banyak dokumen relevan melalui variasi terminologi semantik)
+    \item Namun tanpa preprocessing yang tepat, term expansion juga menurunkan precision (menaikkan rank dokumen tidak relevan yang kebetulan mengandung term expansion)
+    \item Stemming + stopword removal bertindak sebagai filter yang memastikan hanya term bermakna yang diekspansi, sehingga meminimalkan penurunan precision sambil tetap mendapatkan manfaat recall
+\end{itemize}
 
 \section{Screenshot Aplikasi}
 \begin{figure}[H]
@@ -704,15 +739,16 @@ Query expansion umumnya meningkatkan recall tetapi dapat menurunkan precision. M
 % ============================================================================
 
 \section{Kesimpulan}
-[PLACEHOLDER\_KESIMPULAN: Kesimpulan akhir setelah menjalankan eksperimen dengan query expansion]
+Sistem IR berbasis TF-IDF cosine similarity dengan query expansion Word2Vec telah berhasil diimplementasikan dan dievaluasi pada dataset CISI. Berdasarkan hasil eksperimen, dapat disimpulkan:
 
-\textit{Template yang perlu diisi:}
 \begin{itemize}
-    \item Sistem IR berhasil diimplementasikan dengan 7 skema pembobotan TF-IDF dan query expansion berbasis Word2Vec
-    \item Performa sistem diukur menggunakan MAP pada dataset CISI (1460 dokumen, 76 query dengan qrels)
-    \item MAP baseline (original query) dengan konfigurasi stemming=True, stopword=True, tfidf\_cos adalah 0.1791
-    \item Query expansion [meningkatkan/menurunkan] MAP sebesar [X]\%
-    \item Sistem dilengkapi dengan caching untuk 28 variasi konfigurasi, REST API (FastAPI), dan web interface (React + TypeScript)
+    \item Sistem IR berhasil diimplementasikan dengan 7 skema pembobotan TF-IDF dan query expansion berbasis Word2Vec Google News 300 dimensi.
+    \item Performa sistem diukur menggunakan MAP pada dataset CISI (1460 dokumen, 76 query dengan qrels) untuk 4 konfigurasi preprocessing dengan skema \texttt{tfidf\_cos}.
+    \item MAP original terbaik adalah 0.1746 (stemming=T, stopword=F, tfidf\_cos).
+    \item Query expansion hanya meningkatkan MAP pada konfigurasi stemming=True, stopword=True, dari 0.1680 menjadi 0.1790 (peningkatan +6.55\%). Pada tiga konfigurasi lainnya, MAP justru menurun antara 6.93\% hingga 12.34\%.
+    \item Tiga query dengan peningkatan AP tertinggi adalah query 111 (+0.0440), 19 (+0.0433), dan 37 (+0.0229), yang menunjukkan bahwa query dengan term yang memiliki representasi Word2Vec yang baik dapat memperoleh manfaat signifikan dari expansion.
+    \item Stemming dan stopword removal bersamaan merupakan prerequisite penting untuk query expansion yang efektif, karena stemming menormalkan variasi morfologis dan stopword removal menghilangkan noise dari expansion.
+    \item Sistem dilengkapi dengan caching untuk 28 variasi konfigurasi, REST API (FastAPI), dan web interface (React + TypeScript + TailwindCSS).
 \end{itemize}
 
 \section{Saran Pengembangan}
