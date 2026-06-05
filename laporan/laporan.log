@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.21)  5 JUN 2026 22:39
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.21)  5 JUN 2026 23:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -642,70 +642,68 @@ cara teori-tis, ini meningkatkan
  []
 
 [19]
-<images/screenshot_main.png, id=499, 803.0pt x 602.25pt>
+<images/screenshot_main.png, id=499, 1926.19624pt x 967.615pt>
 File: images/screenshot_main.png Graphic file (type png)
 <use images/screenshot_main.png>
 Package pdftex.def Info: images/screenshot_main.png  used on input line 608.
-(pdftex.def)             Requested size: 396.91325pt x 297.68735pt.
+(pdftex.def)             Requested size: 396.91325pt x 199.38112pt.
  [20]
-<images/screenshot_results.png, id=504, 803.0pt x 602.25pt>
+<images/screenshot_results.png, id=504, 1926.19624pt x 967.615pt>
 File: images/screenshot_results.png Graphic file (type png)
 <use images/screenshot_results.png>
 Package pdftex.def Info: images/screenshot_results.png  used on input line 614.
 
-(pdftex.def)             Requested size: 396.91325pt x 297.68735pt.
- [21 <./images/screenshot_main.png (PNG copy)>]
-<images/screenshot_expansion.png, id=510, 803.0pt x 602.25pt>
+(pdftex.def)             Requested size: 396.91325pt x 199.38112pt.
+<images/screenshot_expansion.png, id=505, 1926.19624pt x 967.615pt>
 File: images/screenshot_expansion.png Graphic file (type png)
 <use images/screenshot_expansion.png>
 Package pdftex.def Info: images/screenshot_expansion.png  used on input line 62
 0.
-(pdftex.def)             Requested size: 396.91325pt x 297.68735pt.
-<images/screenshot_map.png, id=511, 803.0pt x 602.25pt>
+(pdftex.def)             Requested size: 396.91325pt x 199.38112pt.
+ [21 <./images/screenshot_main.png> <./images/screenshot_results.png>]
+<images/screenshot_map.png, id=514, 1926.19624pt x 967.615pt>
 File: images/screenshot_map.png Graphic file (type png)
 <use images/screenshot_map.png>
 Package pdftex.def Info: images/screenshot_map.png  used on input line 626.
-(pdftex.def)             Requested size: 396.91325pt x 297.68735pt.
- [22 <./images/screenshot_results.png (PNG copy)> <./images/screenshot_expansio
-n.png (PNG copy)>]
-[23 <./images/screenshot_map.png (PNG copy)>]
+(pdftex.def)             Requested size: 396.91325pt x 199.38112pt.
+[22 <./images/screenshot_expansion.png> <./images/screenshot_map.png>]
 Bab 6.
 
 Overfull \hbox (154.74542pt too wide) in paragraph at lines 637--648
  [][] 
  []
 
-[24
+[23
 
-] [25] [26]
+] [24]
 Bab 7.
 
-Overfull \hbox (11.92717pt too wide) in paragraph at lines 722--723
+Overfull \hbox (11.92717pt too wide) in paragraph at lines 714--715
 []\T1/cmr/m/n/12 MAP base-line (orig-i-nal query) den-gan kon-fig-urasi stem-mi
 ng=True, stop-word=True,
  []
 
 
-Overfull \hbox (16.80371pt too wide) in paragraph at lines 724--725
+Overfull \hbox (16.80371pt too wide) in paragraph at lines 716--717
 []\T1/cmr/m/n/12 Sistem dilengkapi den-gan caching un-tuk 28 vari-asi kon-fig-u
 rasi, REST API (FastAPI),
  []
 
-[27
+[25
 
 ]
 Bab 8.
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2023/02/27 1.9 listings language file
-) [28
+) [26
 
 ]
-Overfull \hbox (7.70879pt too wide) in paragraph at lines 812--813
+Overfull \hbox (7.70879pt too wide) in paragraph at lines 804--805
 []\T1/cmr/m/n/12 CISI Dataset: []$\T1/cmtt/m/n/12 https : / / ir . dcs . gla . 
 ac . uk / resources / test _ collections / cisi$[] 
  []
 
-[29] (./laporan.aux)
+[27] (./laporan.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -714,8 +712,8 @@ Package rerunfilecheck Info: File `laporan.out' has not changed.
 (rerunfilecheck)             Checksum: 8CA57C7F6353701EEFF3D457EED920CB;9666.
  ) 
 Here is how much of TeX's memory you used:
- 15291 strings out of 476139
- 236545 string characters out of 5794454
+ 15289 strings out of 476139
+ 236531 string characters out of 5794454
  2278975 words of memory out of 5000000
  36911 multiletter control sequences out of 15000+600000
  574212 words of font info for 69 fonts, out of 8000000 for 9000
@@ -744,10 +742,10 @@ t/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts
 public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
 s/cm/cmsy8.pfb>
-Output written on laporan.pdf (30 pages, 2041576 bytes).
+Output written on laporan.pdf (28 pages, 2359466 bytes).
 PDF statistics:
- 1313 PDF objects out of 1440 (max. 8388607)
- 656 compressed objects within 7 object streams
- 213 named destinations out of 1000 (max. 500000)
+ 1302 PDF objects out of 1440 (max. 8388607)
+ 650 compressed objects within 7 object streams
+ 211 named destinations out of 1000 (max. 500000)
  536 words of extra memory for PDF output out of 10000 (max. 10000000)
 

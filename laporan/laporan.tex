@@ -67,9 +67,9 @@
 
     \vspace{1.5cm}
 
-    {\large Tugas Besar IF2210 Strategi Algoritma / IF2211 Retrieval Informasi}\\
+    {\large Tugas Besar IF4042 Sistem Temu Balik Informasi}\\
     \vspace{0.3cm}
-    {\large Semester [SEMESTER], Tahun Akademik [TAHUN]}
+    {\large Semester Genap, Tahun Akademik 2025/2026}
 
     \vspace{2cm}
 
@@ -638,10 +638,10 @@ Query expansion umumnya meningkatkan recall tetapi dapat menurunkan precision. M
         \toprule
         \textbf{NIM} & \textbf{Nama} & \textbf{Role} & \textbf{File Utama} \\
         \midrule
-        13523017 & Orvin Andika Ikhsan Abhista & Programmer 1 & \texttt{preprocessor.py}, \texttt{parser.py} \\
-        13523027 & Fajar Kurniawan & Programmer 2 & \texttt{indexer.py} \\
-        13523056 & Salman Hanif & Programmer 3 & \texttt{word2vec\_engine.py} \\
-        13523100 & Aryo Wisanggeni & Programmer 4 & \texttt{query\_expansion.py} \\
+        13523017 & Orvin Andika Ikhsan Abhista & Programmer 1 & \texttt{preprocessor.py}, \texttt{indexer.py}, \texttt{parser.py} \\
+        13523027 & Fajar Kurniawan & Programmer 2 & \texttt{weighting.py}, \texttt{retrieval.py} \\
+        13523056 & Salman Hanif & Programmer 3 & \texttt{word2vec\_engine.py}, \texttt{query\_expansion.py} \\
+        13523100 & Aryo Wisanggeni & Programmer 4 & \texttt{interfaces.py}, \texttt{main.py}, \texttt{output\_writer.py}  \\
         13523072 & Sabilul Huda & Programmer 5 & \texttt{evaluator.py}, \texttt{weighting.py}, \texttt{retrieval.py}, Laporan \\
         \bottomrule
     \end{tabular}
@@ -653,59 +653,51 @@ Query expansion umumnya meningkatkan recall tetapi dapat menurunkan precision. M
 \subsection{Programmer 1 - Orvin Andika Ikhsan Abhista (13523017)}
 \textbf{Tanggung Jawab:} Preprocessing dan Parsing
 \begin{itemize}
-    \item Implementasi text normalization (lowercase, remove punctuation via regex)
-    \item Implementasi tokenization (split on space)
-    \item Integrasi NLTK stopwords removal
-    \item Integrasi Porter Stemmer dari NLTK
-    \item Parser format dokumen CISI (.I, .T, .A, .W, .B tags)
-    \item Normalisasi document ID ke format DOC\#\#\#
+    \item Tokenisasi teks, 
+    \item stemming (PySastrawi, opsional user), 
+    \item eliminasi
+    \item stopword (opsional user), 
+    \item parsing format dokumen EDUNEX,
+    \item membangun inverted index, 
+    \item menyimpan index ke file
 \end{itemize}
 
 \subsection{Programmer 2 - Fajar Kurniawan (13523027)}
 \textbf{Tanggung Jawab:} Inverted Index
 \begin{itemize}
-    \item Build inverted index dari koleksi dokumen
-    \item Struktur index: \texttt{dict[term, \{"df", "postings"\}]}
-    \item Term frequency counting per dokumen
-    \item Document frequency tracking
-    \item Save/load index (JSON dan Pickle format)
-    \item Document terms retrieval
+    \item Implementasi skema TF (logarithmic, binary, augmented, raw), IDF,TFxIDF, TFxIDFxcosine normalization; 
+    \item fungsi similarity measure (cosine); 
+    \item ranking dokumen berdasarkan skor similarity; 
+    \item user bisa memilih skema pembobotan
 \end{itemize}
 
 \subsection{Programmer 3 - Salman Hanif (13523056)}
 \textbf{Tanggung Jawab:} Word2Vec Engine
 \begin{itemize}
-    \item Wrapper Word2Vec model (gensim)
-    \item Load pre-trained model dari gensim downloader
-    \item Train model dari koleksi dokumen
-    \item Implementasi \texttt{get\_similar()} dengan 5 filter
-    \item Implementasi \texttt{similarity()} untuk dua kata
-    \item Singleton pattern untuk engine instance
-    \item \texttt{save\_disk\_cache()} untuk persistensi cache
+    \item Load pre-trained Word2Vec model (atau train dari koleksi dokumen); 
+    \item mencari top-N kata tetangga terdekat via cosine similarity di vector space; 
+    \item implementasi expand\_query(query\_terms, top\_n) yang mengembalikan pasangan (term, bobot); 
+    \item user bisa mengatur jumlah term yang ditambahkan
 \end{itemize}
 
 \subsection{Programmer 4 - Aryo Wisanggeni (13523100)}
 \textbf{Tanggung Jawab:} Query Expansion
 \begin{itemize}
-    \item Implementasi \texttt{expand\_query()} dengan Word2Vec
-    \item Implementasi \texttt{expand\_query\_all()} untuk unlimited expansion
-    \item Implementasi \texttt{get\_expanded\_query\_terms()} helper
-    \item Format expansion detail untuk output/logging
-    \item Handling OOV (out-of-vocabulary) terms
+    \item Buat interfaces.py (hari pertama); 
+    \item bangun CLI interaktif dan mode batch; 
+    \item implementasi FastAPI endpoints (/search, /expand, /map, /index); 
+    \item build React frontend dengan halaman: Search, Results, MAP Report, Inverted Index; 
+    \item generate semua file output; 
+    \item integrasi semua modul
 \end{itemize}
 
 \subsection{Programmer 5 - Sabilul Huda (13523072)}
 \textbf{Tanggung Jawab:} Evaluasi, Retrieval, Weighting, dan Laporan
 \begin{itemize}
-    \item Implementasi \texttt{weighting.py} - 7 skema pembobotan TF-IDF
-    \item Implementasi \texttt{retrieval.py} - Document ranking dengan cosine similarity
-    \item Implementasi \texttt{compute\_ap()} untuk Average Precision per query
-    \item Implementasi \texttt{compute\_map()} untuk MAP overall
-    \item Parser qrels (auto-detect format binary/graded)
-    \item Experiment runner dengan support untuk caching
-    \item Report generation
-    \item Koordinasi penulisan laporan
-    \item Programmer's Reference
+    \item Implementasi compute\_map(rankings, qrels) untuk MAP per query dan MAP overall; 
+    \item siapkan file qrels.txt (ground truth relevansi); 
+    \item jalankan eksperimen dan catat hasil; 
+    \item tulis laporan lengkap
 \end{itemize}
 
 % ============================================================================
@@ -809,7 +801,7 @@ results = run_experiment(use_expansion=True)
     \item Mikolov, T., et al. (2013). "Efficient Estimation of Word Representations in Vector Space." ICLR.
     \item Robertson, S.E., et al. (1994). "Okapi at TREC-3." TREC.
     \item Manning, C.D., Raghavan, P., \& Schütze, H. (2008). "Introduction to Information Retrieval." Cambridge University Press.
-    \item CISI Dataset: \url{https://ir.dcs.gla.ac.uk/resources/test_collections/cisi}
+    \item CISI Dataset: \url{https://ir.dcs.gla.ac.uk/resources/test\_collections/cisi}
     \item Gensim Documentation: \url{https://radimrehurek.com/gensim/}
     \item NLTK Documentation: \url{https://www.nltk.org/}
     \item FastAPI Documentation: \url{https://fastapi.tiangolo.com/}
