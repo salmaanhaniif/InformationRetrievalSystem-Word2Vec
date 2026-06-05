@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.21)  5 JUN 2026 23:11
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.21)  5 JUN 2026 23:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -610,13 +610,13 @@ Bab 4.
 [15
 
 ]
-Overfull \hbox (3.11409pt too wide) in paragraph at lines 474--475
+Overfull \hbox (3.11409pt too wide) in paragraph at lines 473--474
 []\T1/cmtt/m/n/12 SearchPage.tsx \T1/cmr/m/n/12 - Ha-la-man utama den-gan state
  man-age-ment (params, ac-tiveTab,
  []
 
 
-Overfull \hbox (3.47375pt too wide) in paragraph at lines 480--481
+Overfull \hbox (3.47375pt too wide) in paragraph at lines 479--480
 []\T1/cmtt/m/n/12 MapReportTab.tsx \T1/cmr/m/n/12 - Met-ric cards (MAP orig-i-n
 al/-ex-panded den-gan delta), tombol
  []
@@ -624,19 +624,19 @@ al/-ex-panded den-gan delta), tombol
 [16] [17]
 Bab 5.
 
-Overfull \hbox (70.04086pt too wide) in paragraph at lines 530--537
+Overfull \hbox (70.04086pt too wide) in paragraph at lines 529--536
  [][] 
  []
 
 [18
 
 ]
-Overfull \hbox (8.2842pt too wide) in paragraph at lines 567--567
+Overfull \hbox (8.2842pt too wide) in paragraph at lines 566--566
 |[]\T1/cmr/bx/n/17.28 Analisis Per-bandin-gan MAP Orig-i-nal vs Ex-panded
  []
 
 
-Overfull \hbox (5.72119pt too wide) in paragraph at lines 570--571
+Overfull \hbox (5.72119pt too wide) in paragraph at lines 569--570
 \T1/cmr/m/n/12 yang se-cara se-man-tik mirip den-gan term orig-i-nal query. Se-
 cara teori-tis, ini meningkatkan
  []
@@ -645,31 +645,31 @@ cara teori-tis, ini meningkatkan
 <images/screenshot_main.png, id=499, 1926.19624pt x 967.615pt>
 File: images/screenshot_main.png Graphic file (type png)
 <use images/screenshot_main.png>
-Package pdftex.def Info: images/screenshot_main.png  used on input line 608.
+Package pdftex.def Info: images/screenshot_main.png  used on input line 607.
 (pdftex.def)             Requested size: 396.91325pt x 199.38112pt.
  [20]
 <images/screenshot_results.png, id=504, 1926.19624pt x 967.615pt>
 File: images/screenshot_results.png Graphic file (type png)
 <use images/screenshot_results.png>
-Package pdftex.def Info: images/screenshot_results.png  used on input line 614.
+Package pdftex.def Info: images/screenshot_results.png  used on input line 613.
 
 (pdftex.def)             Requested size: 396.91325pt x 199.38112pt.
 <images/screenshot_expansion.png, id=505, 1926.19624pt x 967.615pt>
 File: images/screenshot_expansion.png Graphic file (type png)
 <use images/screenshot_expansion.png>
-Package pdftex.def Info: images/screenshot_expansion.png  used on input line 62
-0.
+Package pdftex.def Info: images/screenshot_expansion.png  used on input line 61
+9.
 (pdftex.def)             Requested size: 396.91325pt x 199.38112pt.
  [21 <./images/screenshot_main.png> <./images/screenshot_results.png>]
 <images/screenshot_map.png, id=514, 1926.19624pt x 967.615pt>
 File: images/screenshot_map.png Graphic file (type png)
 <use images/screenshot_map.png>
-Package pdftex.def Info: images/screenshot_map.png  used on input line 626.
+Package pdftex.def Info: images/screenshot_map.png  used on input line 625.
 (pdftex.def)             Requested size: 396.91325pt x 199.38112pt.
 [22 <./images/screenshot_expansion.png> <./images/screenshot_map.png>]
 Bab 6.
 
-Overfull \hbox (154.74542pt too wide) in paragraph at lines 637--648
+Overfull \hbox (154.74542pt too wide) in paragraph at lines 636--647
  [][] 
  []
 
@@ -678,13 +678,13 @@ Overfull \hbox (154.74542pt too wide) in paragraph at lines 637--648
 ] [24]
 Bab 7.
 
-Overfull \hbox (11.92717pt too wide) in paragraph at lines 714--715
+Overfull \hbox (11.92717pt too wide) in paragraph at lines 713--714
 []\T1/cmr/m/n/12 MAP base-line (orig-i-nal query) den-gan kon-fig-urasi stem-mi
 ng=True, stop-word=True,
  []
 
 
-Overfull \hbox (16.80371pt too wide) in paragraph at lines 716--717
+Overfull \hbox (16.80371pt too wide) in paragraph at lines 715--716
 []\T1/cmr/m/n/12 Sistem dilengkapi den-gan caching un-tuk 28 vari-asi kon-fig-u
 rasi, REST API (FastAPI),
  []
@@ -698,7 +698,7 @@ File: lstlang1.sty 2023/02/27 1.9 listings language file
 ) [26
 
 ]
-Overfull \hbox (7.70879pt too wide) in paragraph at lines 804--805
+Overfull \hbox (7.70879pt too wide) in paragraph at lines 802--803
 []\T1/cmr/m/n/12 CISI Dataset: []$\T1/cmtt/m/n/12 https : / / ir . dcs . gla . 
 ac . uk / resources / test _ collections / cisi$[] 
  []
@@ -708,44 +708,91 @@ ac . uk / resources / test _ collections / cisi$[]
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
-Package rerunfilecheck Info: File `laporan.out' has not changed.
-(rerunfilecheck)             Checksum: 8CA57C7F6353701EEFF3D457EED920CB;9666.
+
+
+Package rerunfilecheck Warning: File `laporan.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `laporan.out':
+(rerunfilecheck)             Before: 8CA57C7F6353701EEFF3D457EED920CB;9666
+(rerunfilecheck)             After:  33FAB0D4D2B18411E59513D19167A2EE;9666.
  ) 
 Here is how much of TeX's memory you used:
- 15289 strings out of 476139
- 236531 string characters out of 5794454
+ 15298 strings out of 476139
+ 236651 string characters out of 5794454
  2278975 words of memory out of 5000000
  36911 multiletter control sequences out of 15000+600000
  574212 words of font info for 69 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  75i,9n,79p,443b,2162s stack positions out of 10000i,1000n,20000p,200000b,200000s
- </home/bill2247/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecti1200.
-600pk> </home/bill2247/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1
-095.600pk> </home/bill2247/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/e
-cbx1095.600pk> </home/bill2247/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/
-ec/ecrm0800.600pk> </home/bill2247/.texlive2023/texmf-var/fonts/pk/ljfour/jknap
-pen/ec/ectt1200.600pk> </home/bill2247/.texlive2023/texmf-var/fonts/pk/ljfour/j
-knappen/ec/ecbx1440.600pk> </home/bill2247/.texlive2023/texmf-var/fonts/pk/ljfo
-ur/jknappen/ec/ecrm0600.600pk> </home/bill2247/.texlive2023/texmf-var/fonts/pk/
-ljfour/jknappen/ec/ectt1095.600pk> </home/bill2247/.texlive2023/texmf-var/fonts
-/pk/ljfour/jknappen/ec/ecti1095.600pk> </home/bill2247/.texlive2023/texmf-var/f
-onts/pk/ljfour/jknappen/ec/tcrm1200.600pk> </home/bill2247/.texlive2023/texmf-v
-ar/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </home/bill2247/.texlive2023/tex
-mf-var/fonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> </home/bill2247/.texlive2023
-/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1440.600pk> </home/bill2247/.texlive
-2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1728.600pk> </home/bill2247/.tex
-live2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx2488.600pk></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmsy8.pfb>
-Output written on laporan.pdf (28 pages, 2359466 bytes).
+
+pdfTeX warning (dest): name{section.173} has been referenced but does not exist
+, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{section.171} has been referenced but does not exist
+, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.164} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.161} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.157} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.154} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.150} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.143} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{section.142} has been referenced but does not exist
+, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{chapter.141} has been referenced but does not exist
+, replaced by a fixed one
+
+ </home/bill2247/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecti1200.60
+0pk> </home/bill2247/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm109
+5.600pk> </home/bill2247/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecb
+x1095.600pk> </home/bill2247/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec
+/ecrm0800.600pk> </home/bill2247/.texlive2023/texmf-var/fonts/pk/ljfour/jknappe
+n/ec/ectt1200.600pk> </home/bill2247/.texlive2023/texmf-var/fonts/pk/ljfour/jkn
+appen/ec/ecbx1440.600pk> </home/bill2247/.texlive2023/texmf-var/fonts/pk/ljfour
+/jknappen/ec/ecrm0600.600pk> </home/bill2247/.texlive2023/texmf-var/fonts/pk/lj
+four/jknappen/ec/ectt1095.600pk> </home/bill2247/.texlive2023/texmf-var/fonts/p
+k/ljfour/jknappen/ec/ecti1095.600pk> </home/bill2247/.texlive2023/texmf-var/fon
+ts/pk/ljfour/jknappen/ec/tcrm1200.600pk> </home/bill2247/.texlive2023/texmf-var
+/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </home/bill2247/.texlive2023/texmf
+-var/fonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> </home/bill2247/.texlive2023/t
+exmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1440.600pk> </home/bill2247/.texlive20
+23/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1728.600pk> </home/bill2247/.texli
+ve2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx2488.600pk></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmsy8.pfb>
+Output written on laporan.pdf (28 pages, 2359553 bytes).
 PDF statistics:
- 1302 PDF objects out of 1440 (max. 8388607)
- 650 compressed objects within 7 object streams
- 211 named destinations out of 1000 (max. 500000)
+ 1315 PDF objects out of 1440 (max. 8388607)
+ 663 compressed objects within 7 object streams
+ 220 named destinations out of 1000 (max. 500000)
  536 words of extra memory for PDF output out of 10000 (max. 10000000)
 
