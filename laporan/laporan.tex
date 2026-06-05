@@ -420,7 +420,6 @@ FastAPI REST API dengan fitur caching:
         uvicorn[standard] & $\geq$0.48.0 & ASGI server \\
         gensim & $\geq$4.4.0 & Word2Vec model implementation \\
         nltk & $\geq$3.9.4 & Tokenization, stopwords, Porter stemmer \\
-        pysastrawi & $\geq$1.2.1 & Indonesian stemmer (opsional) \\
         pytest & $\geq$9.0.3 & Testing framework \\
         python-multipart & $\geq$0.0.30 & Form data parsing \\
         pydantic & (bawaan fastapi) & Request/response validation \\
@@ -654,7 +653,7 @@ Query expansion umumnya meningkatkan recall tetapi dapat menurunkan precision. M
 \textbf{Tanggung Jawab:} Preprocessing dan Parsing
 \begin{itemize}
     \item Tokenisasi teks, 
-    \item stemming (PySastrawi, opsional user), 
+    \item stemming (opsional user), 
     \item eliminasi
     \item stopword (opsional user), 
     \item parsing format dokumen EDUNEX,
@@ -726,7 +725,6 @@ Query expansion umumnya meningkatkan recall tetapi dapat menurunkan precision. M
     \item Unit tests coverage $>$ 80\%
     \item UI/UX improvement pada frontend (mobile responsive, search history)
     \item Implementasi snippet generation untuk search results
-    \item Support untuk Indonesian language processing (pysaStrawi integration)
 \end{enumerate}
 
 % ============================================================================
